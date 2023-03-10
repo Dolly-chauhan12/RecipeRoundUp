@@ -1,0 +1,9 @@
+export { default as Navbar } from './Navbar';
+export { default as Sidebar } from './Sidebar';
+export { default as Login } from './Login';
+export { default as Discover } from './Discover';
+export { default as Feed } from './Feed';
+export { default as Search } from './Search';
+export { default as CreatePost } from './CreatePost';
+export { default as UserDetail } from './UserDetail';
+export { default as PostDetail } from './PostDetail';
