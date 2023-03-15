@@ -4,8 +4,8 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'caption',
-      title: 'Caption',
+      name: 'title',
+      title: 'Title',
       type: 'string'
     },
     {
@@ -19,7 +19,13 @@ export default {
     {
       name: 'recipe',
       title: 'Recipe',
-      type: 'text'
+      type: 'array',
+      of: [{ type: 'block' }]
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'string'
     },
     {
       name: 'userId',

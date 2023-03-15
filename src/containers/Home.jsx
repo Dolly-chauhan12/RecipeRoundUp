@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { Sidebar } from '../components'
+import { Sidebar, UserDetail } from '../components'
 import useAuthStore from '../store/authStore';
 import Posts from './Posts'
 
@@ -29,7 +29,7 @@ const Home = () => {
 
       <div className="pb-2 flex-1 h-screen overflow-y-scroll" ref={scrollRef}>
         <Routes>
-          {/*<Route path="/user-profile/:userId" element={<UserProfile />} />*/}
+          <Route path="/user-profile/:userId" element={<UserDetail />} />
           <Route path="/*" element={<Posts user={user && user} />} />
         </Routes>
       </div>

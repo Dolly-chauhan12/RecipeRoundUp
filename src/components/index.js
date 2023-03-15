@@ -7,3 +7,6 @@ export { default as Search } from './Search';
 export { default as CreatePost } from './CreatePost';
 export { default as UserDetail } from './UserDetail';
 export { default as PostDetail } from './PostDetail';
+export { default as RecipeCard } from './RecipeCard';
+export { default as Spinner } from './Spinner';
+export { default as NoResult } from './NoResult';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLocation, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { AiFillHome, AiOutlineMenu } from 'react-icons/ai';
 import { ImCancelCircle } from 'react-icons/im'
 import Discover from './Discover';
@@ -11,7 +11,7 @@ const Sidebar = () => {
 
 
   const [showSidebar, setshowSidebar] = useState(true);
-  const { pathname } = useLocation();
+
 
   const { userProfile } = useAuthStore();
 
