@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { PortableText } from '@portabletext/react'
 import { GoVerified } from 'react-icons/go';
 
+
 const RecipeCard = ({ post }) => {
 
   const { postedBy, image, _id, title, recipe } = post;
@@ -77,6 +78,8 @@ const RecipeCard = ({ post }) => {
         <div className=' w-1/2 mt-1 h-[390px] overflow-hidden'>
 
           <p className='text-clip  '><PortableText value={recipe} components={components} /></p>
+
+
         </div>
       </div>
 

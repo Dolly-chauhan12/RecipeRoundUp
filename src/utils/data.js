@@ -40,3 +40,31 @@ export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
   }`;
 
 
+export const postDetailQuery = (postId) => {
+  const query = `*[_type == "post" && _id == '${postId}']{
+        image{
+          asset->{
+            url
+          }
+        },
+            _id,
+            title,
+            recipe,
+            postedBy->{
+              _id,
+              userName,
+              image
+            },
+           likes,
+          comments[]{
+            comment,
+            _key,
+            postedBy->{
+              _id,
+              userName,
+              image
+            },
+          }
+          }`;
+  return query;
+};

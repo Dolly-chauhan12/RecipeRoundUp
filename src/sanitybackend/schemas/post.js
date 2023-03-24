@@ -20,7 +20,7 @@ export default {
       name: 'recipe',
       title: 'Recipe',
       type: 'array',
-      of: [{ type: 'block' }]
+      of: [{ type: 'block' }],
     },
     {
       name: 'category',
