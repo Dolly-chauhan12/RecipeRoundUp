@@ -19,8 +19,7 @@ export default {
     {
       name: 'recipe',
       title: 'Recipe',
-      type: 'array',
-      of: [{ type: 'block' }],
+      type: 'text',
     },
     {
       name: 'category',
@@ -49,7 +48,13 @@ export default {
     {
       name: 'likes',
       title: 'Likes',
-      type: 'number',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'user' }],
+        },
+      ],
     },
     {
       name: 'comments',

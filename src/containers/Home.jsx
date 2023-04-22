@@ -15,9 +15,9 @@ const Home = () => {
     setUser(userProfile);
   }, [userProfile]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     scrollRef.current.scrollTo(0, 0);
-  })
+  })*/
 
 
   return (
@@ -27,7 +27,7 @@ const Home = () => {
         <Sidebar />
       </div>
 
-      <div className="pb-2 flex-1 h-screen overflow-y-scroll" ref={scrollRef}>
+      <div className="pb-2 flex-1 h-screen " >
         <Routes>
           <Route path="/user-profile/:userId" element={<UserDetail />} />
           <Route path="/*" element={<Posts user={user && user} />} />

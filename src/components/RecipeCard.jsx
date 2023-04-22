@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { PortableText } from '@portabletext/react'
 import { GoVerified } from 'react-icons/go';
 
 
@@ -8,31 +7,6 @@ const RecipeCard = ({ post }) => {
 
   const { postedBy, image, _id, title, recipe } = post;
 
-
-  const components = {
-    block: {
-      // Ex. 1: customizing common block types
-      h3: ({ children }) => <h3 className="text-2xl">{children}</h3>,
-      h4: ({ children }) => <h4 className="text-2xl">{children}</h4>,
-      h5: ({ children }) => <h5 className="text-2xl">{children}</h5>,
-
-    },
-    list: {
-      // Ex. 1: customizing common list types
-      bullet: ({ children }) => <ul className="mt-xl">{children}</ul>,
-      number: ({ children }) => <ol className="mt-lg">{children}</ol>,
-
-      // Ex. 2: rendering custom lists
-      checkmarks: ({ children }) => <ol className="m-auto text-lg">{children}</ol>,
-    },
-    listItem: {
-      // Ex. 1: customizing common list types
-      bullet: ({ children }) => <li>• {children}</li>,
-
-      // Ex. 2: rendering custom list items
-      checkmarks: ({ children }) => <li>✅ {children}</li>,
-    },
-  }
 
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-3'>
@@ -77,7 +51,7 @@ const RecipeCard = ({ post }) => {
         </div>
         <div className=' w-1/2 mt-1 h-[390px] overflow-hidden'>
 
-          <p className='text-clip  '><PortableText value={recipe} components={components} /></p>
+          <p className='text-clip '>{recipe}</p>
 
 
         </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Spinner } from './'
-import { client, urlFor } from '../client'
+import { client } from '../client'
 import { postDetailQuery } from '../utils/data'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -23,9 +23,6 @@ const PostDetail = ({ user }) => {
       });
     }
   }
-
-
-
 
 
   useEffect(() => {
@@ -54,7 +51,7 @@ const PostDetail = ({ user }) => {
 
   if (!postDetail) {
     return (
-      <Spinner message="Showing pin" />
+      <Spinner message="Showing post" />
     );
   }
 
@@ -82,7 +79,10 @@ const PostDetail = ({ user }) => {
             <p className="font-bold">{postDetail?.postedBy.userName}</p>
           </Link>
 
-          <div><p> Here the recipe text will be rendered</p></div>
+          <div><p> Here the recipe text will be rendered
+            <br />
+            {postDetail.recipe}
+          </p></div>
 
           <h2 className='mt-5 text-2xl'>Comments</h2>
           <div className='max-h-370 overflow-y-auto'>
@@ -109,7 +109,7 @@ const PostDetail = ({ user }) => {
             <input
               className=" flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300"
               type="text"
-              placeholder="Add a comment"
+              placeholder="Add a comment "
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
