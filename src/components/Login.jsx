@@ -2,11 +2,12 @@ import React from 'react'
 import { createOrGetUser } from '../utils/createOrGetUser';
 import { GoogleLogin } from '@react-oauth/google';
 import useAuthStore from '../store/authStore';
-
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
   const { userProfile, addUser } = useAuthStore();
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -14,6 +15,7 @@ const Login = () => {
         onSuccess={credentialResponse => {
           createOrGetUser(credentialResponse, addUser);
           console.log(credentialResponse);
+          navigate('/');
         }}
         onError={() => {
           console.log('Login Failed');

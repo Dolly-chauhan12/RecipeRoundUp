@@ -69,6 +69,10 @@ export const postDetailQuery = (postId) => {
   return query;
 };
 
+export const userQuery = (userId) => {
+  const query = `*[_type == 'user' && _id == '${userId}']`;
+  return query;
+}
 
 export const userCreatedPostsQuery = (userId) => {
   const query = `*[ _type == 'post' && userId == '${userId}'] | order(_createdAt desc){
