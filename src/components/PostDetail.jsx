@@ -4,6 +4,7 @@ import { Spinner } from './'
 import { client } from '../client'
 import { postDetailQuery } from '../utils/data'
 import { v4 as uuidv4 } from 'uuid';
+import { LikeButton } from './'
 
 
 
@@ -48,6 +49,18 @@ const PostDetail = ({ user }) => {
     };
   }
 
+  const handleLike = async () => {
+    if (user) {
+      const data = await client.patch(postId)
+        .setIfMissing({ likes: [] })
+        .append('likes', [{ _ref: user._id, _key: uuidv4() }])
+        .commit()
+
+      //console.log(data);
+      setPostDetail({ ...postDetail, likes: data.likes });
+    }
+  }
+
 
   if (!postDetail) {
     return (
@@ -72,6 +85,15 @@ const PostDetail = ({ user }) => {
             <h1 className="text-4xl font-bold break-words mt-3">
               {postDetail.title}
             </h1>
+            <div>
+              {user && <LikeButton
+                likes={postDetail.likes}
+                flex='flex'
+                handleLike={() => handleLike(true)}
+
+              />}
+            </div>
+
           </div>
 
           <Link to={`/user-profile/${postDetail?.postedBy._id}`} className="flex gap-2 mt-5 items-center bg-white rounded-lg ">
@@ -79,10 +101,9 @@ const PostDetail = ({ user }) => {
             <p className="font-bold">{postDetail?.postedBy.userName}</p>
           </Link>
 
-          <div><p> Here the recipe text will be rendered
-            <br />
+          <div>
             {postDetail.recipe}
-          </p></div>
+          </div>
 
           <h2 className='mt-5 text-2xl'>Comments</h2>
           <div className='max-h-370 overflow-y-auto'>
@@ -102,7 +123,7 @@ const PostDetail = ({ user }) => {
           </div>
 
 
-          <div className="flex flex-wrap mt-6 gap-3">
+          <div className="flex flex-wrap mt-4 mb-2 gap-3">
             <Link to={`/user-profile/${user._id}`}>
               <img src={user.image} className="w-10 h-10 rounded-full cursor-pointer" alt="user-profile" />
             </Link>
