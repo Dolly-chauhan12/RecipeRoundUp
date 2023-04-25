@@ -5,7 +5,7 @@ import { GoVerified } from 'react-icons/go';
 
 const RecipeCard = ({ post }) => {
 
-  const { postedBy, image, _id, title, recipe } = post;
+  const { postedBy, image, _id, title, recipe, likes } = post;
 
 
   return (
@@ -47,6 +47,7 @@ const RecipeCard = ({ post }) => {
               src={image.asset.url}
               className='lg:w-[600px] lg:h-[372px] md:w-[450px] md:h-[400px]  w-[350px] h-[240px] rounded-2xl cursor-pointer bg-gray-100'
             ></img>
+            <p className='font-bold mt-1'>Liked by {likes?.length ? likes?.length : 0} people</p>
           </Link>
         </div>
         <div className=' w-1/2 mt-1 h-[390px] overflow-hidden'>

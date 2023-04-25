@@ -1,5 +1,5 @@
 export const searchQuery = (searchTerm) => {
-  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*' || about match '${searchTerm}*']{
+  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*']{
         image{
           asset->{
             url
@@ -8,7 +8,6 @@ export const searchQuery = (searchTerm) => {
             _id,
             title,
             userId,
-            recipe,
             postedBy->{
               _id,
               userName,

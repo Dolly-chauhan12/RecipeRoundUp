@@ -11,6 +11,7 @@ const Navbar = ({ serchTerm, setSearchTerm, user }) => {
   const { removeUser } = useAuthStore();
 
 
+
   return (
     <div className="w-full flex justify-between items-center border-b-2 border-gray-200 py-2 px-4">
       <div className='flex justify-start items-center px-2 border-2 border-gray-100 bg-white  focus:outline-none focus:border-2 focus:border-gray-300 rounded-full'>

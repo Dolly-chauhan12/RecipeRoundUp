@@ -11,16 +11,18 @@ const Login = () => {
 
   return (
     <div>
-      {userProfile ? (<div> {userProfile.userName} </div>) : (<GoogleLogin
-        onSuccess={credentialResponse => {
-          createOrGetUser(credentialResponse, addUser);
-          console.log(credentialResponse);
-          navigate('/');
-        }}
-        onError={() => {
-          console.log('Login Failed');
-        }}
-      />)}
+      {userProfile
+        ? (<div> {userProfile.userName} </div>) :
+        (<GoogleLogin
+          onSuccess={credentialResponse => {
+            createOrGetUser(credentialResponse, addUser);
+            console.log(credentialResponse);
+            navigate('/');
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />)}
     </div>
 
   )
