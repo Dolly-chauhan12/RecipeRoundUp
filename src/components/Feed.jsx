@@ -37,9 +37,9 @@ const Feed = () => {
   }
 
   return (
-    <div className='flex flex-col gap-10 h-full'>
+    <div className='flex flex-col gap-2 h-full '>
       {posts.length
-        ? posts?.map((post) => (<RecipeCard post={post} key={post._id} />))
+        ? posts?.map((post) => (<RecipeCard post={post} key={post._id} searchPage={false} />))
         : <NoResult text={`Sorry , No Recipes Found`} />
       }
     </div>

@@ -38,7 +38,7 @@ const Search = ({ searchTerm }) => {
   return (
     <div className='flex flex-col gap-10 h-full'>
       {posts.length
-        ? posts?.map((post) => (<RecipeCard post={post} key={post._id} />))
+        ? posts?.map((post) => (<RecipeCard post={post} key={post._id} searchPage={true} />))
         : <NoResult text={`Sorry , No Recipes Found`} />
       }
     </div>

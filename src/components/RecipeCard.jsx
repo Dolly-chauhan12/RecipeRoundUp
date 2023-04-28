@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { GoVerified } from 'react-icons/go';
 
 
-const RecipeCard = ({ post }) => {
+const RecipeCard = ({ post, searchPage }) => {
 
   const { postedBy, image, _id, title, recipe, likes } = post;
 
@@ -41,7 +41,7 @@ const RecipeCard = ({ post }) => {
       <div className='lg:ml-20 flex gap-4 relative'>
         <div>
           <Link to={`/post-detail/${_id}`}>
-            <p className=' font-semibold mb-1'>{title} </p>
+            <p className=' font-semibold text-xl mb-1'>{title} </p>
             <img
               alt="recipe"
               src={image.asset.url}
@@ -50,12 +50,12 @@ const RecipeCard = ({ post }) => {
             <p className='font-bold mt-1'>Liked by {likes?.length ? likes?.length : 0} people</p>
           </Link>
         </div>
-        <div className=' w-1/2 mt-1 h-[390px] overflow-hidden'>
+        {!searchPage &&
+          <div className=' w-1/2 mt-1 h-[390px] overflow-hidden'>
 
-          <p className='text-clip '>{recipe}</p>
+            <p className='text-clip font-medium '>{recipe}</p>
 
-
-        </div>
+          </div>}
       </div>
 
     </div>

@@ -8,13 +8,13 @@ export const searchQuery = (searchTerm) => {
             _id,
             title,
             userId,
+            recipe,
             postedBy->{
               _id,
               userName,
               image
             },
            likes,
-
           }`;
   return query;
 };
@@ -29,6 +29,7 @@ export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
         }
       },
       userId,
+      recipe,
       postedBy->{
         _id,
         userName,

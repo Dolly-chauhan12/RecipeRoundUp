@@ -4,32 +4,47 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { googleLogout } from '@react-oauth/google';
 import useAuthStore from '../store/authStore';
 import { client } from '../client';
-import { userCreatedPostsQuery } from '../utils/data';
-import { RecipeCard, NoResult } from './'
+import { userCreatedPostsQuery, userLikedPostsQuery } from '../utils/data';
+import { RecipeCard, NoResult, Spinner } from './'
 
 const UserDetail = ({ user }) => {
 
   const { removeUser } = useAuthStore();
   const [postsList, setPostsList] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showUserPost, setShowUserPost] = useState(true);
   const navigate = useNavigate();
   const { userId } = useParams();
+
+  const videos = showUserPost ? 'border-b-2 border-green' : 'text-gray-400';
+  const liked = !showUserPost ? 'border-b-2 border-green' : 'text-gray-400';
 
   useEffect(() => {
 
     const fetchPosts = async () => {
-
-      const postsQuery = userCreatedPostsQuery(userId);
-      client.fetch(postsQuery).then((data) => {
-        setPostsList(data)
-        console.log(data);
-      });
+      setLoading(true);
+      if (showUserPost) {
+        const postsQuery = userCreatedPostsQuery(userId);
+        client.fetch(postsQuery).then((data) => {
+          setPostsList(data)
+          console.log(data);
+        });
+      } else {
+        const postsQuery = userLikedPostsQuery(userId);
+        client.fetch(postsQuery).then((data) => {
+          setPostsList(data)
+          console.log(data);
+        });
+      }
+      setLoading(false);
     }
 
     fetchPosts();
+  }, [showUserPost, userId]);
 
-  }, [userId]);
-
-
+  if (loading) {
+    return (<Spinner message="We are fetching your recipes " />);
+  }
 
   return (
     <div className="pb-2 h-full justify-center items-center">
@@ -61,8 +76,9 @@ const UserDetail = ({ user }) => {
             </button>
           </div>
         </div>
-        <div className="text-center mb-7">
-          <p className='text-xl font-semibold'>Your Recipes</p>
+        <div className=" mb-7 flex  w-full border-gray-200 bg-white gap-10">
+          <p className={`text-xl font-semibold cursor-pointer mt-1 ${videos}`} onClick={() => setShowUserPost(true)}>Your Posts</p>
+          <p className={`text-xl font-semibold cursor-pointer mt-1 ${liked}`} onClick={() => setShowUserPost(false)}>Your Liked Posts</p>
         </div>
 
         <div className='flex flex-wrap md:justify-start'>
