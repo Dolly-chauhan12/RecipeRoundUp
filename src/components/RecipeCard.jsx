@@ -50,8 +50,8 @@ const RecipeCard = ({ post, searchPage }) => {
             <p className='font-bold mt-1'>Liked by {likes?.length ? likes?.length : 0} people</p>
           </Link>
         </div>
-        {!searchPage &&
-          <div className=' w-1/2 mt-1 h-[390px] overflow-hidden'>
+        {recipe && recipe.length > 0 &&
+          <div className=' w-1/2 mt-2 pt-5  h-[390px] overflow-hidden hidden md:block'>
 
             <p className='text-clip font-medium '>{recipe}</p>
 

@@ -13,7 +13,7 @@ const CreatePost = ({ user }) => {
   // console.log(ContentType)
 
   const [title, setTitle] = useState('');
-  const [recipe, setRecipe] = useState('Hello');
+  const [recipe, setRecipe] = useState('');
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState();
   const [category, setCategory] = useState();
@@ -91,7 +91,7 @@ const CreatePost = ({ user }) => {
 
 
   return (
-    <div className='flex flex-col '>
+    <div className='flex flex-col pb-2'>
       <div className="flex flex-col  mt-5 lg:h-4/5 ">
         {fields && (
           //<p className="text-red-500 mb-5 text-xl transition-all duration-150 ease-in ">Please add all fields.</p>
@@ -192,18 +192,18 @@ const CreatePost = ({ user }) => {
         </div>
       </div>
 
-      <div className="flex flex-col w-full" >
-        <div className='flex flex-col' >
-          <p> Add recipe</p>
+      <div className="flex flex-col " >
+        <div className='flex flex-col gap-1' >
+          <p className='font-semibold text:lg sm:text-xl'> Add recipe</p>
           <textarea rows="10" cols="30" value={recipe}
-            onChange={(e) => setRecipe(e.target.value)} />
+            onChange={(e) => setRecipe(e.target.value)} className='border-2 border-gray-400' />
 
         </div>
         <div className="flex justify-end items-end mt-5">
           <button
             type="button"
             onClick={savePin}
-            className="bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none"
+            className="bg-green-900 text-white font-bold p-2 rounded-full w-28 outline-none"
           >
             Save Pin
           </button>

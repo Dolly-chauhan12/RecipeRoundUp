@@ -49,15 +49,15 @@ const UserDetail = ({ user }) => {
   return (
     <div className="pb-2 h-full justify-center items-center">
       <div className="flex flex-col pb-5">
-        <div className="relative flex flex-col mb-7">
-          <div className="flex items-center mt-2">
+        <div className="relative flex flex-col mb-6">
+          <div className="flex items-center mt-2 gap-1 pt-1">
 
             <img
-              className="rounded-full w-20 h-20 shadow-xl object-cover"
+              className="rounded-full w-10 h-10 md:w-16 md:h-16 shadow-xl object-cover"
               src={user.image}
               alt="user-pic"
             />
-            <h1 className="font-bold text-3xl text-center mt-3 pl-2">
+            <h1 className="font-bold text-sm md:text-3xl text-center mt-2 pl-2 ">
               {user.userName}
             </h1>
           </div>
@@ -70,7 +70,7 @@ const UserDetail = ({ user }) => {
                 removeUser();
                 navigate('/');
               }}
-              className='border-2  rounded-full cursor-pointer outline-none shadow-md px-8 py-3'
+              className='border-2 rounded-full cursor-pointer outline-none shadow-md px-4 py-1.5 md:px-8 md:py-3'
             >
               Logout
             </button>
@@ -81,7 +81,7 @@ const UserDetail = ({ user }) => {
           <p className={`text-xl font-semibold cursor-pointer mt-1 ${liked}`} onClick={() => setShowUserPost(false)}>Your Liked Posts</p>
         </div>
 
-        <div className='flex flex-wrap md:justify-start'>
+        <div className='flex flex-col '>
           {postsList.length ? (
             postsList?.map((post) =>
               (<RecipeCard post={post} key={post._id} />)
