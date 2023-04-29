@@ -11,7 +11,7 @@ import { LikeButton } from './'
 const PostDetail = ({ user }) => {
   const { postId } = useParams();
   const [postDetail, setPostDetail] = useState();
-  const [comment, setComment] = useState();
+  const [comment, setComment] = useState('');
   const [addingComment, setAddingComment] = useState(false);
 
   const fetchPostDetails = () => {
@@ -30,21 +30,20 @@ const PostDetail = ({ user }) => {
     fetchPostDetails();
   }, [postId]);
 
-  const addComment = () => {
+  const addComment = async () => {
 
     if (comment) {
       setAddingComment(true);
 
-      client
-        .patch(postId)
+      const data = await client.patch(postId)
         .setIfMissing({ comments: [] })
         .insert('after', 'comments[-1]', [{ comment, _key: uuidv4(), postedBy: { _type: 'postedBy', _ref: user._id } }])
         .commit()
-        .then(() => {
-          fetchPostDetails();
-          setComment('');
-          setAddingComment(false);
-        });
+
+      setPostDetail({ ...postDetail, comments: data.comments });
+
+      setComment('');
+      setAddingComment(false);
 
     };
   }
@@ -56,7 +55,7 @@ const PostDetail = ({ user }) => {
         .append('likes', [{ _ref: user._id, _key: uuidv4() }])
         .commit()
 
-      //console.log(data);
+
       setPostDetail({ ...postDetail, likes: data.likes });
     }
   }
@@ -101,7 +100,7 @@ const PostDetail = ({ user }) => {
             <p className="font-bold">{postDetail?.postedBy.userName}</p>
           </Link>
 
-          <div>
+          <div className='font-semibold text-large'>
             {postDetail.recipe}
           </div>
 
@@ -136,7 +135,7 @@ const PostDetail = ({ user }) => {
             />
             <button
               type="button"
-              className="bg-red-500 text-white rounded-full px-6 py-2 font-semibold text-base outline-none"
+              className="bg-green-800 text-white rounded-full px-6 py-2 font-semibold text-base outline-none"
               onClick={addComment}
             >
               {addingComment ? 'Doing...' : 'Done'}
