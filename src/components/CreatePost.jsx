@@ -8,9 +8,7 @@ import { Spinner } from './'
 
 const CreatePost = ({ user }) => {
 
-  // const ContentType = schemaTypes[0].fields.find(field => field.name === 'recipe').type
 
-  // console.log(ContentType)
 
   const [title, setTitle] = useState('');
   const [recipe, setRecipe] = useState('');
@@ -26,7 +24,6 @@ const CreatePost = ({ user }) => {
   const uploadImage = (e) => {
 
     const selectedFile = e.target.files[0];
-    //uploading image asset to sanity
 
     if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg' || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif' || selectedFile.type === 'image/tiff') {
       setWrongImageType(false);
@@ -205,7 +202,7 @@ const CreatePost = ({ user }) => {
             onClick={savePin}
             className="bg-green-900 text-white font-bold p-2 rounded-full w-28 outline-none"
           >
-            Save Pin
+            Save Recipe
           </button>
         </div>
 
