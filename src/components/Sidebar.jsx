@@ -43,7 +43,7 @@ const Sidebar = () => {
 
           <Discover />
           <div>
-            <p className='text-gray-500 text-lg  mt-5'>© 2023 RecipeRoundup(RR)</p>
+            <p className='text-gray-500 text-lg  mt-5 hidden xl:block'>© 2023 RecipeRoundup(RR)</p>
           </div>
 
         </div>

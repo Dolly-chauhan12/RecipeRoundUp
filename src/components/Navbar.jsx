@@ -29,12 +29,12 @@ const Navbar = ({ serchTerm, setSearchTerm, user }) => {
       </div>
 
 
-      <div>
+      <div className='mt-1'>
         {user ? (
           <div className='flex gap-5 md:gap-10'>
             <Link to='/create-post'>
-              <button className='border-b-2 px-2 md:px-4 text-md font-semibold flex items-center gap-2 my-3 py-1'><IoMdAdd className='text-xl' />
-                <span>Upload</span>
+              <button className='rounded px-2 md:px-4 text-xl font-semibold flex items-center gap-2 my-1 py-2 bg-gradient-to-r from-green-400 via-green-500 to-green-700  hover:bg-gradient-to-br text-white'><IoMdAdd className='text-2xl ' />
+                <span >Upload</span>
               </button>
             </Link>
 
