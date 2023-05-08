@@ -22,8 +22,8 @@ const Home = () => {
 
       <div className='pb-2 flex-1 h-screen' >
         <Routes>
-          <Route path="/user-profile/:userId" element={<UserDetail user={user && user} />} />
           <Route path="/*" element={<Posts user={user && user} />} />
+          <Route path="/user-profile/:userId" element={<UserDetail />} />
         </Routes>
       </div>
     </div>

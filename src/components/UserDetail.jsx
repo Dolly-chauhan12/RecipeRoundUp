@@ -1,25 +1,31 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { googleLogout } from '@react-oauth/google';
-import useAuthStore from '../store/authStore';
+import { useParams } from 'react-router-dom';
 import { client } from '../client';
-import { userCreatedPostsQuery, userLikedPostsQuery } from '../utils/data';
+import { userQuery, userCreatedPostsQuery, userLikedPostsQuery } from '../utils/data';
 import { RecipeCard, NoResult, Spinner } from './'
 
-const UserDetail = ({ user }) => {
+const UserDetail = () => {
 
-  const { removeUser } = useAuthStore();
+  const [user, setUser] = useState('');
   const [postsList, setPostsList] = useState('');
   const [loading, setLoading] = useState(false);
   const [showUserPost, setShowUserPost] = useState(true);
-  const navigate = useNavigate();
   const { userId } = useParams();
 
   const videos = showUserPost ? 'border-b-2 border-green' : 'text-gray-400';
   const liked = !showUserPost ? 'border-b-2 border-green' : 'text-gray-400';
 
   useEffect(() => {
+
+    const fetchUser = async () => {
+
+      const query = userQuery(userId);
+      client.fetch(query).then((data) => {
+        console.log(data)
+        setUser(data[0])
+      });
+    }
 
     const fetchPosts = async () => {
       setLoading(true);
@@ -36,7 +42,7 @@ const UserDetail = ({ user }) => {
       }
       setLoading(false);
     }
-
+    fetchUser();
     fetchPosts();
   }, [showUserPost, userId]);
 
@@ -60,19 +66,6 @@ const UserDetail = ({ user }) => {
             </h1>
           </div>
 
-          <div className='absolute top-2 z-1 right-0 p-2 font-bold'>
-            <button
-              type='button'
-              onClick={() => {
-                googleLogout();
-                removeUser();
-                navigate('/');
-              }}
-              className='border-2 rounded-full cursor-pointer outline-none shadow-md px-4 py-1.5 md:px-8 md:py-3'
-            >
-              Logout
-            </button>
-          </div>
         </div>
         <div className='mb-7 flex  w-full border-gray-200 bg-white gap-10'>
           <p className={`text-xl font-semibold cursor-pointer mt-1 ${videos}`} onClick={() => setShowUserPost(true)}>Your Posts</p>
@@ -85,7 +78,7 @@ const UserDetail = ({ user }) => {
               (<RecipeCard post={post} key={post._id} />)
             )
           ) :
-            <NoResult text={"Not posted recipes yet"} />
+            <NoResult text={"Not posted any recipes yet"} />
           }
         </div>
       </div>

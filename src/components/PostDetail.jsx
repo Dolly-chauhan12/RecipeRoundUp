@@ -95,7 +95,7 @@ const PostDetail = ({ user }) => {
           </div>
 
           <Link to={`/user-profile/${postDetail?.postedBy._id}`} className='flex gap-2 mt-5 items-center bg-white rounded-lg '>
-            <img src={postDetail?.postedBy.image} className='w-10 h-10 rounded-full' alt="user-profile" />
+            <img src={postDetail?.postedBy?.image} className='w-10 h-10 rounded-full' alt="user-profile" />
             <p className='font-bold'>{postDetail?.postedBy.userName}</p>
           </Link>
 
@@ -104,24 +104,29 @@ const PostDetail = ({ user }) => {
           </div>
 
           <h2 className='mt-5 text-2xl'>Comments</h2>
-          <div className='max-h-370 overflow-y-auto'>
-            {postDetail?.comments?.map((item) => (
-              <div className='flex gap-2 mt-5 items-center bg-white rounded-lg' key={item.comment}>
-                <img
-                  src={item.postedBy?.image}
-                  className='w-10 h-10 rounded-full cursor-pointer'
-                  alt="user-profile"
-                />
-                <div className='flex flex-col'>
-                  <p className='font-bold'>{item.postedBy?.userName}</p>
-                  <p>{item.comment}</p>
+          <div className='max-h-370 overflow-y-auto mb-2'>
+            {postDetail?.comments?.length ? (
+              postDetail?.comments?.map((item) => (
+                <div className='flex gap-2 mt-5 items-center bg-white rounded-lg' key={item.comment}>
+                  <img
+                    src={item.postedBy?.image}
+                    className='w-10 h-10 rounded-full cursor-pointer'
+                    alt="user-profile"
+                  />
+                  <div className='flex flex-col'>
+                    <p className='font-bold'>{item.postedBy?.userName}</p>
+                    <p>{item.comment}</p>
+                  </div>
                 </div>
+              ))) : (
+              <div className='mb-2'>
+                <p className='text-lg'>No comments till now...</p>
               </div>
-            ))}
+            )}
           </div>
 
 
-          <div className='flex flex-wrap mt-4 mb-2 gap-3'>
+          {user && <div className='flex flex-wrap mt-2 mb-2 gap-3'>
             <Link to={`/user-profile/${user._id}`}>
               <img src={user.image} className='w-10 h-10 rounded-full cursor-pointer' alt="user-profile" />
             </Link>
@@ -139,7 +144,7 @@ const PostDetail = ({ user }) => {
             >
               {addingComment ? 'Doing...' : 'Done'}
             </button>
-          </div>
+          </div>}
         </div>
       )}
     </>
