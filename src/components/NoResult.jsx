@@ -1,8 +1,6 @@
 import React from 'react'
 import { GiPeriscope } from 'react-icons/gi';
 
-
-
 const NoResult = ({ text }) => {
   return (
     <div className='flex flex-col justify-center items-center h-full w-full pt-12'>

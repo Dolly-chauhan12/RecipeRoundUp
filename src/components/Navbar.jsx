@@ -4,16 +4,15 @@ import { IoMdAdd, IoMdSearch } from 'react-icons/io';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { googleLogout } from '@react-oauth/google';
 import useAuthStore from '../store/authStore';
-import Login from './Login';
+import { Login } from './';
 
 const Navbar = ({ serchTerm, setSearchTerm, user }) => {
+
   const navigate = useNavigate();
   const { removeUser } = useAuthStore();
 
-
-
   return (
-    <div className="w-full  flex flex-wrap justify-center lg:justify-between items-center border-b-2 border-gray-200 py-2 px-4">
+    <div className='w-full  flex flex-wrap justify-center lg:justify-between items-center border-b-2 border-gray-200 py-2 px-4'>
       <div className='flex justify-start items-center px-2 border-2 border-gray-100 bg-white  focus-within:border-2 focus-within:border-green-700 rounded-full w-full lg:w-1/2'>
         <input
           type="text"
@@ -58,11 +57,8 @@ const Navbar = ({ serchTerm, setSearchTerm, user }) => {
           </div>
 
         ) : (<Login />)
-
         }
-
       </div>
-
     </div >
   )
 

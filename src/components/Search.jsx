@@ -10,9 +10,7 @@ const Search = ({ searchTerm }) => {
   const [loading, setLoading] = useState(false)
 
   const fetchSearchPosts = () => {
-    console.log(searchTerm)
     if (searchTerm !== '') {
-
       setLoading(true);
       const query = searchQuery(searchTerm);
       client.fetch(query).then((data) => {
@@ -30,11 +28,13 @@ const Search = ({ searchTerm }) => {
 
   useEffect(() => {
     fetchSearchPosts()
+    // eslint-disable-next-line
   }, [searchTerm])
 
   if (loading) {
     return <Spinner message="Searching pins" />
   }
+
   return (
     <div className='flex flex-col gap-10 h-full'>
       {posts.length

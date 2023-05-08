@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import useQuery from '../utils/useQuery';
 import { client } from '../client';
 import { feedQuery, searchQuery } from '../utils/data'
-
 import { Spinner, RecipeCard, NoResult } from './'
 
 const Feed = () => {
+
   const [posts, setPosts] = useState("");
   const [loading, setLoading] = useState(false);
   let query = useQuery();
@@ -29,7 +29,6 @@ const Feed = () => {
     }
   }, [categoryId]);
 
-
   const ideaName = categoryId || "new";
 
   if (loading) {
@@ -39,7 +38,7 @@ const Feed = () => {
   return (
     <div className='flex flex-col gap-2 h-full '>
       {posts.length
-        ? posts?.map((post) => (<RecipeCard post={post} key={post._id} searchPage={false} />))
+        ? posts?.map((post) => (<RecipeCard post={post} key={post._id} />))
         : <NoResult text={`Sorry , No Recipes Found`} />
       }
     </div>

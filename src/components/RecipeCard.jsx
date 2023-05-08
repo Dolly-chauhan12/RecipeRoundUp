@@ -7,7 +7,6 @@ const RecipeCard = ({ post, searchPage }) => {
 
   const { postedBy, image, _id, title, recipe, likes } = post;
 
-
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-3'>
       <div>
@@ -18,7 +17,7 @@ const RecipeCard = ({ post, searchPage }) => {
                 <img
                   width={44}
                   height={44}
-                  className=' rounded-full'
+                  className='rounded-full'
                   src={postedBy?.image}
                   alt='user-profile'
                   layout='responsive'
@@ -50,10 +49,10 @@ const RecipeCard = ({ post, searchPage }) => {
             <p className='font-bold mt-1'>Liked by {likes?.length ? likes?.length : 0} people</p>
           </Link>
         </div>
-        {recipe && recipe.length > 0 &&
-          <div className=' w-1/2 mt-2 pt-5  h-[390px] overflow-hidden hidden md:block'>
+        {recipe && recipe.length > 0 && !searchPage &&
+          <div className='w-1/2 mt-2 pt-5  h-[390px] overflow-hidden hidden md:block'>
 
-            <p className='text-clip font-medium '>{recipe}</p>
+            <p className='text-clip font-medium whitespace-pre-wrap'>{recipe}</p>
 
           </div>}
       </div>
@@ -63,3 +62,4 @@ const RecipeCard = ({ post, searchPage }) => {
 }
 
 export default RecipeCard
+

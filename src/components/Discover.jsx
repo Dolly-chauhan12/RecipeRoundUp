@@ -4,21 +4,14 @@ import useQuery from '../utils/useQuery';
 import { categories } from '../assets/constant';
 
 
-
-
-//const topicStyle = 'flex items-center px - 5 gap - 3 text - gray - 500 hover: text - black transition - all duration - 200 ease -in -out capitalize';
-//const activeTopicStyle = 'flex items-center px-5 gap-3 font-extrabold border-r-2 border-black  transition-all duration-200 ease-in-out capitalize';
-
 const Discover = () => {
-  let query = useQuery();
 
+  let query = useQuery();
   const category = query.get("category");
 
 
   const activeTopicStyle = 'xl:border-2  xl:border-green-800 px-3 py-2 rounded xl:rounded-full flex items-center gap-2 justify-center cursor-pointer text-green-700';
   const topicStyle = 'xl:border-2 hover:bg-slate-200 xl:border-gray-300 px-3 py-2 rounded xl:rounded-full flex items-center gap-2 justify-center cursor-pointer text-gray-500';
-
-
 
 
   return (

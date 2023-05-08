@@ -16,7 +16,6 @@ const Login = () => {
         (<GoogleLogin
           onSuccess={credentialResponse => {
             createOrGetUser(credentialResponse, addUser);
-            console.log(credentialResponse);
             navigate('/');
           }}
           onError={() => {

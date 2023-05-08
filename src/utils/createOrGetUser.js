@@ -1,4 +1,3 @@
-//import axios from "axios"
 import jwt_decode from "jwt-decode"
 import { client } from "../client";
 
@@ -15,12 +14,10 @@ export const createOrGetUser = (response, addUser) => {
     image: picture
   }
 
-
-
   client.createIfNotExists(user).then(() =>
     console.log("Login Success")
   );
 
   addUser(user);
-  console.log(decoded);
+
 }

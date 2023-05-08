@@ -27,13 +27,11 @@ const UserDetail = ({ user }) => {
         const postsQuery = userCreatedPostsQuery(userId);
         client.fetch(postsQuery).then((data) => {
           setPostsList(data)
-          console.log(data);
         });
       } else {
         const postsQuery = userLikedPostsQuery(userId);
         client.fetch(postsQuery).then((data) => {
           setPostsList(data)
-          console.log(data);
         });
       }
       setLoading(false);
@@ -47,22 +45,22 @@ const UserDetail = ({ user }) => {
   }
 
   return (
-    <div className="pb-2 h-full justify-center items-center">
-      <div className="flex flex-col pb-5">
-        <div className="relative flex flex-col mb-6">
-          <div className="flex items-center mt-2 gap-1 pt-1">
+    <div className='pb-2 h-full justify-center items-center'>
+      <div className='flex flex-col pb-5'>
+        <div className='relative flex flex-col mb-6'>
+          <div className='flex items-center mt-2 gap-1 pt-1'>
 
             <img
-              className="rounded-full w-10 h-10 md:w-16 md:h-16 shadow-xl object-cover"
+              className='rounded-full w-10 h-10 md:w-16 md:h-16 shadow-xl object-cover'
               src={user.image}
               alt="user-pic"
             />
-            <h1 className="font-bold text-sm md:text-3xl text-center mt-2 pl-2 ">
+            <h1 className='font-bold text-sm md:text-3xl text-center mt-2 pl-2'>
               {user.userName}
             </h1>
           </div>
 
-          <div className="absolute top-2 z-1 right-0 p-2 font-bold">
+          <div className='absolute top-2 z-1 right-0 p-2 font-bold'>
             <button
               type='button'
               onClick={() => {
@@ -76,7 +74,7 @@ const UserDetail = ({ user }) => {
             </button>
           </div>
         </div>
-        <div className=" mb-7 flex  w-full border-gray-200 bg-white gap-10">
+        <div className='mb-7 flex  w-full border-gray-200 bg-white gap-10'>
           <p className={`text-xl font-semibold cursor-pointer mt-1 ${videos}`} onClick={() => setShowUserPost(true)}>Your Posts</p>
           <p className={`text-xl font-semibold cursor-pointer mt-1 ${liked}`} onClick={() => setShowUserPost(false)}>Your Liked Posts</p>
         </div>

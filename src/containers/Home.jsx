@@ -13,17 +13,14 @@ const Home = () => {
     setUser(userProfile);
   }, [userProfile]);
 
-
-
-
   return (
 
-    <div className="flex ">
-      <div className="h-[92vh]  ">
+    <div className='flex'>
+      <div className='h-[92vh]'>
         <Sidebar />
       </div>
 
-      <div className="pb-2 flex-1 h-screen " >
+      <div className='pb-2 flex-1 h-screen' >
         <Routes>
           <Route path="/user-profile/:userId" element={<UserDetail user={user && user} />} />
           <Route path="/*" element={<Posts user={user && user} />} />

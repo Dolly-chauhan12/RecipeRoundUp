@@ -10,18 +10,11 @@ const Sidebar = () => {
 
 
   const [showSidebar, setshowSidebar] = useState(true);
-
-
   const { userProfile } = useAuthStore();
-
-  /*  const activeLink = '';
-  
-    const normalLink = 'flex items-center gap-3 hover:bg-primary p-3 justify-center xl:justify-start cursor-pointer font-semibold  rounded';w-[90px] md:w-[210px]*/
-
 
   return (
     <div>
-      <div className="block xl:hidden m-2 mt-3 text-xl" onClick={() => setshowSidebar((prev) => (!prev))}>
+      <div className='block xl:hidden m-2 mt-3 text-xl' onClick={() => setshowSidebar((prev) => (!prev))}>
         {showSidebar ? <ImCancelCircle /> : <AiOutlineMenu />}
       </div>
       {showSidebar && (
@@ -49,12 +42,12 @@ const Sidebar = () => {
           )}
 
           <Discover />
-
+          <div>
+            <p className='text-gray-500 text-lg  mt-5'>© 2023 RecipeRoundup(RR)</p>
+          </div>
 
         </div>
       )}
-
-
     </div>
   )
 }
