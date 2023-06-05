@@ -11,3 +11,5 @@ export { default as RecipeCard } from './RecipeCard';
 export { default as Spinner } from './Spinner';
 export { default as NoResult } from './NoResult';
 export { default as LikeButton } from './LikeButton'
+export { default as EditPost } from './EditPost'
+export { default as EditPostForm } from './EditPostForm'

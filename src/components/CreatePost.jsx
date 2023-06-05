@@ -1,48 +1,54 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { MdDelete } from 'react-icons/md';
-import { AiOutlineCloudUpload } from 'react-icons/ai';
-import { categories } from '../assets/constant';
-import { client } from '../client';
-import { Spinner } from './'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { TagsInput } from "react-tag-input-component";
+import { MdDelete } from "react-icons/md";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import { categories } from "../assets/constant";
+import { client } from "../client";
+import { Spinner } from "./";
 
 const CreatePost = ({ user }) => {
-
-  const [title, setTitle] = useState('');
-  const [recipe, setRecipe] = useState('');
+  const [title, setTitle] = useState("");
+  const [recipe, setRecipe] = useState("");
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState();
   const [category, setCategory] = useState();
+  const [ingredients, setIngredients] = useState([]);
   const [imageAsset, setImageAsset] = useState();
   const [wrongImageType, setWrongImageType] = useState(false);
 
   const navigate = useNavigate();
 
-
   const uploadImage = (e) => {
-
     const selectedFile = e.target.files[0];
 
-    if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg' || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif' || selectedFile.type === 'image/tiff') {
+    if (
+      selectedFile.type === "image/png" ||
+      selectedFile.type === "image/svg" ||
+      selectedFile.type === "image/jpeg" ||
+      selectedFile.type === "image/gif" ||
+      selectedFile.type === "image/tiff"
+    ) {
       setWrongImageType(false);
       setLoading(true);
       client.assets
-        .upload('image', selectedFile, { contentType: selectedFile.type, filename: selectedFile.filename })
+        .upload("image", selectedFile, {
+          contentType: selectedFile.type,
+          filename: selectedFile.filename,
+        })
         .then((document) => {
           setImageAsset(document);
+          // console.log(document);
           setLoading(false);
         })
         .catch((error) => {
-          console.log('Upload failed', error.message);
+          console.log("Upload failed", error.message);
         });
-
-    }
-    else {
+    } else {
       setLoading(false);
       setWrongImageType(true);
     }
-  }
-
+  };
 
   const savePin = () => {
     if (title && recipe && category && imageAsset?._id) {
@@ -50,60 +56,63 @@ const CreatePost = ({ user }) => {
         _type: "post",
         title,
         recipe,
+        ingredients,
         image: {
           _type: "image",
           asset: {
             _type: "reference",
-            _ref: imageAsset?._id
-          }
+            _ref: imageAsset?._id,
+          },
         },
         category,
+        likes: [],
         userId: user._id,
         postedBy: {
-          _type: 'postedBy',
-          _ref: user._id
-        }
-
+          _type: "postedBy",
+          _ref: user._id,
+        },
       };
       client.create(doc).then(() => {
-        navigate('/');
-      })
+        navigate("/");
+      });
     } else {
       setFields(true);
 
-      window.scrollTo({ top: 0, behavior: "smooth" })
-      setTimeout(
-        () => {
-          setFields(false);
-        }, 2500
-      )
-
-    };
-
-  }
-
-
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => {
+        setFields(false);
+      }, 2500);
+    }
+  };
 
   return (
-    <div className='flex flex-col pb-2'>
+    <div className="flex flex-col pb-2">
       <div className="flex flex-col  mt-5 lg:h-4/5 ">
         {fields && (
-          <div className="flex items-center bg-green-900 text-white text-sm font-bold px-4 py-3" role="alert" id="pop_up">
-            <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z" /></svg>
+          <div
+            className="flex items-center bg-green-900 text-white text-sm font-bold px-4 py-3"
+            role="alert"
+            id="pop_up"
+          >
+            <svg
+              className="fill-current w-4 h-4 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z" />
+            </svg>
             <p>Please add all fields</p>
           </div>
         )}
         <div className=" flex lg:flex-row flex-col justify-center items-center bg-white lg:p-5 p-3  w-full">
           <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
             <div className=" flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
-              {loading && (
-                <Spinner />
+              {loading && <Spinner />}
+              {wrongImageType && (
+                <p className="text-red-500 transition-all duration-150 ease-in">
+                  It&apos;s wrong file type.
+                </p>
               )}
-              {
-                wrongImageType && (
-                  <p className='text-red-500 transition-all duration-150 ease-in'>It&apos;s wrong file type.</p>
-                )
-              }
               {!imageAsset ? (
                 // eslint-disable-next-line jsx-a11y/label-has-associated-control
                 <label>
@@ -116,7 +125,8 @@ const CreatePost = ({ user }) => {
                     </div>
 
                     <p className="mt-32 text-gray-400">
-                      Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF or TIFF less than 20MB
+                      Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF
+                      or TIFF less than 20MB
                     </p>
                   </div>
                   <input
@@ -158,39 +168,60 @@ const CreatePost = ({ user }) => {
                 <img
                   src={user.image}
                   className="w-10 h-10 rounded-full"
+                  referrerPolicy="no-referrer"
                   alt="user-profile"
                 />
                 <p className="font-bold">{user.userName}</p>
               </div>
             )}
 
-
             <div>
-              <p className="mb-2 font-semibold text:lg sm:text-xl">Choose Pin Category</p>
+              <p className="mb-2 font-semibold text:lg sm:text-xl">
+                Choose Pin Category
+              </p>
               <select
                 onChange={(e) => {
                   setCategory(e.target.value);
                 }}
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
               >
-                <option value="others" className="sm:text-bg bg-white">Select Category</option>
+                <option value="others" className="sm:text-bg bg-white">
+                  Select Category
+                </option>
                 {categories.map((item) => (
-                  <option className="text-base border-0 outline-none capitalize bg-white text-black " value={item.name} key={item.name}>
+                  <option
+                    className="text-base border-0 outline-none capitalize bg-white text-black "
+                    value={item.name}
+                    key={item.name}
+                  >
                     {item.name}
                   </option>
                 ))}
               </select>
             </div>
+
+            <div>
+              <TagsInput
+                value={ingredients}
+                onChange={setIngredients}
+                name="ingredients"
+                placeHolder="Enter Ingredients"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col " >
-        <div className='flex flex-col gap-1' >
-          <p className='font-semibold text:lg sm:text-xl'> Add recipe</p>
-          <textarea rows="10" cols="30" value={recipe}
-            onChange={(e) => setRecipe(e.target.value)} className='border-2 border-gray-400' />
-
+      <div className="flex flex-col ">
+        <div className="flex flex-col gap-1">
+          <p className="font-semibold text:lg sm:text-xl"> Add recipe</p>
+          <textarea
+            rows="10"
+            cols="30"
+            value={recipe}
+            onChange={(e) => setRecipe(e.target.value)}
+            className="border-2 border-gray-400"
+          />
         </div>
         <div className="flex justify-end items-end mt-5">
           <button
@@ -201,12 +232,13 @@ const CreatePost = ({ user }) => {
             Save Recipe
           </button>
         </div>
+      </div>
 
-      </div >
+      <span className="text-sm text-slate-400">
+        *New posts may take up to 5 minutes to reflect in your feed.
+      </span>
     </div>
+  );
+};
 
-  )
-}
-
-export default CreatePost
-
+export default CreatePost;

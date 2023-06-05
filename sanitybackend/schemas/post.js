@@ -37,8 +37,8 @@ export default {
       type: 'postedBy'
     },
     {
-      title: 'ingredients',
-      name: 'Ingredients',
+      name: 'ingredients',
+      title: 'Ingredients',
       type: 'array',
       of: [{ type: 'string' }],
       options: {
