@@ -1,5 +1,5 @@
 export const searchQuery = (searchTerm) => {
-  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*']{
+  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] | order(_createdAt desc) {
         image{
           asset->{
             url
@@ -14,7 +14,28 @@ export const searchQuery = (searchTerm) => {
               userName,
               image
             },
-           likes,
+           likes[],
+          }`;
+  return query;
+};
+
+export const searchQueryByLikes = (searchTerm) => {
+  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] |  order(count(likes) desc) {
+        image{
+          asset->{
+            url
+          }
+        },
+            _id,
+            title,
+            userId,
+            recipe,
+            postedBy->{
+              _id,
+              userName,
+              image
+            },
+           likes[],
           }`;
   return query;
 };
@@ -39,6 +60,25 @@ export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
    
   }`;
 
+export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc) {
+ _id,
+     title,
+       image{
+        asset->{
+          url
+        }
+      },
+      userId,
+      recipe,
+      postedBy->{
+        _id,
+        userName,
+        image
+      },
+    likes[],
+   
+  }`;
+
 
 export const postDetailQuery = (postId) => {
   const query = `*[_type == "post" && _id == '${postId}']{
@@ -50,12 +90,14 @@ export const postDetailQuery = (postId) => {
             _id,
             title,
             recipe,
+            category,
             postedBy->{
               _id,
               userName,
               image
             },
            likes,
+          ingredients,
           comments[]{
             comment,
             _key,
@@ -73,9 +115,10 @@ export const userQuery = (userId) => {
   const query = `*[_type == 'user' && _id == '${userId}']`;
   return query;
 }
-
+// order(_createdAt desc)
 export const userCreatedPostsQuery = (userId) => {
-  const query = `*[ _type == 'post' && userId == '${userId}'] | order(_createdAt desc){
+  const query = `*[ _type == 'post' && userId == '${userId}'] | order(count(likes) desc)
+  {
     _id,
      title,
        image{
@@ -90,7 +133,7 @@ export const userCreatedPostsQuery = (userId) => {
       userName,
       image
     },
-    likes,
+    likes[],
     comments[]{
       comment,
       _key,
@@ -135,3 +178,4 @@ export const userLikedPostsQuery = (userId) => {
 
   return query;
 };
+// 
