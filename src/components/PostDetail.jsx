@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Spinner } from "./";
+import { Comments, CreateComment, Spinner } from "./";
 import { client } from "../client";
 import { postDetailQuery } from "../utils/data";
 import { v4 as uuidv4 } from "uuid";
@@ -10,8 +10,7 @@ import { LikeButton } from "./";
 const PostDetail = ({ user }) => {
   const { postId } = useParams();
   const [postDetail, setPostDetail] = useState("");
-  const [comment, setComment] = useState("");
-  const [addingComment, setAddingComment] = useState(false);
+
   const [showMenubar, setshowMenubar] = useState(false);
 
   const fetchPostDetails = () => {
@@ -28,29 +27,6 @@ const PostDetail = ({ user }) => {
     fetchPostDetails();
     // eslint-disable-next-line
   }, [postId]);
-
-  const addComment = async () => {
-    if (comment) {
-      setAddingComment(true);
-
-      const data = await client
-        .patch(postId)
-        .setIfMissing({ comments: [] })
-        .insert("after", "comments[-1]", [
-          {
-            comment,
-            _key: uuidv4(),
-            postedBy: { _type: "postedBy", _ref: user._id },
-          },
-        ])
-        .commit();
-
-      setPostDetail({ ...postDetail, comments: data.comments });
-
-      setComment("");
-      setAddingComment(false);
-    }
-  };
 
   const handleLike = async () => {
     if (user) {
@@ -84,7 +60,7 @@ const PostDetail = ({ user }) => {
           </div>
 
           <div>
-            <h1 className="text-4xl font-bold break-words mt-3 mb-2">
+            <h1 className="text-4xl break-words mt-3 mb-2 font-poppins">
               {postDetail.title}
             </h1>
 
@@ -126,12 +102,15 @@ const PostDetail = ({ user }) => {
 
             {postDetail?.ingredients && (
               <div>
-                <h2 className="text-xl font-bold my-1"> Ingredients</h2>
-                <div className="flex flex-wrap my-1 py-1">
+                <h2 className="text-xl font-normal my-1 font-poppins">
+                  {" "}
+                  Ingredients
+                </h2>
+                <div className="flex flex-wrap my-1 py-1 ">
                   {postDetail.ingredients.map((tag, index) => (
                     <span
-                      className={`inline-block  px-3 py-1 rounded-full mr-2 mb-2 hover:scale-110 duration-500 ease-in-out ${
-                        index % 2 === 0 ? "bg-green-100" : "bg-green-300"
+                      className={`inline-block font-montaguSlab px-3 py-1 rounded-full mr-2 mb-2 hover:scale-110 duration-500 ease-in-out ${
+                        index % 2 === 0 ? "bg-green-200" : "bg-green-400"
                       }`}
                       key={tag}
                     >
@@ -154,69 +133,32 @@ const PostDetail = ({ user }) => {
                 className="w-10 h-10 rounded-full"
                 alt="user-profile"
               />
-              <p className="font-bold">{postDetail?.postedBy.userName}</p>
+              <p className="font-bold font-PTserif hover:underline">
+                {postDetail?.postedBy.userName}
+              </p>
             </Link>
           </div>
 
           <div>
-            <h2 className="text-xl font-bold my-1"> Cooking Instructions </h2>
-            <div className="font-semibold text-large whitespace-pre-wrap mt-2 p-2 rounded-md border border-slate-300 shadow-lg">
+            <h2 className="text-xl font-bold my-1 font-hind">
+              {" "}
+              Cooking Instructions{" "}
+            </h2>
+            <div className="font-normal text-large whitespace-pre-wrap mt-2 p-2 rounded-md border border-slate-300 shadow-lg font-lexend">
               {postDetail.recipe}
             </div>
           </div>
-
-          <h2 className="mt-5 text-2xl">Comments</h2>
-          <div className="max-h-370 overflow-y-auto mb-2">
-            {postDetail?.comments?.length ? (
-              postDetail?.comments?.map((item) => (
-                <div
-                  className="flex gap-2 mt-5 items-center bg-white rounded-lg"
-                  key={item.comment}
-                >
-                  <img
-                    src={item.postedBy?.image}
-                    className="w-10 h-10 rounded-full cursor-pointer"
-                    alt="user-profile"
-                  />
-                  <div className="flex flex-col">
-                    <p className="font-bold">{item.postedBy?.userName}</p>
-                    <p>{item.comment}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="mb-2">
-                <p className="text-lg">No comments till now...</p>
-              </div>
-            )}
-          </div>
+          <br />
 
           {user && (
-            <div className="flex flex-wrap mt-2 mb-2 gap-3">
-              <Link to={`/user-profile/${user._id}`}>
-                <img
-                  src={user.image}
-                  className="w-10 h-10 rounded-full cursor-pointer"
-                  alt="user-profile"
-                />
-              </Link>
-              <input
-                className=" flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300"
-                type="text"
-                placeholder="Add a comment "
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-              <button
-                type="button"
-                className="bg-green-800 text-white rounded-full px-6 py-2 font-semibold text-base outline-none disabled:opacity-30"
-                onClick={addComment}
-                disabled={comment.length > 0 ? false : true}
-              >
-                {addingComment ? "Adding Comment.." : "Comment"}
-              </button>
-            </div>
+            <CreateComment
+              user={user}
+              postId={postId}
+              postDetail={postDetail}
+              setPostDetail={setPostDetail}
+            />
           )}
+          <Comments postDetail={postDetail} />
 
           <span className="text-sm text-slate-400 my-1 ">
             *Please allow a few minutes for new comments to be visible on the

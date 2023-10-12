@@ -54,7 +54,7 @@ const Feed = () => {
   const ideaName = categoryId || "new";
 
   const buttonStyle =
-    " border-2 p-2  cursor-pointer outline-none shadow-sm flex rounded-full items-center gap-2 justify-center m-1.5 lg:m-1 w-1/4 hover:bg-slate-200";
+    " border-2 p-2  cursor-pointer outline-none shadow-sm flex rounded-full items-center gap-2 justify-center m-1.5 lg:m-1 w-1/4 hover:bg-green-800 hover:text-white";
 
   const activeButtonStyle =
     "border-2 p-2  cursor-pointer outline-none shadow-sm flex rounded-full items-center gap-2 justify-center m-1.5 lg:m-1 text-green-600 border-green-600  font-bold  w-1/4 ";

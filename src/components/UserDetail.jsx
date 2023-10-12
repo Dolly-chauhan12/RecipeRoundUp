@@ -91,7 +91,7 @@ const UserDetail = ({ viewer }) => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-[1800px]:grid-cols-3 gap-1 justify-items-center lg:justify-items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-[1800px]:grid-cols-3 gap-2 justify-items-center lg:justify-items-start">
           {postsList.length ? (
             postsList?.map((post) => <RecipeCard post={post} key={post._id} />)
           ) : (

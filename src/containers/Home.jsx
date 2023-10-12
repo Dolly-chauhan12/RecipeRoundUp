@@ -14,11 +14,11 @@ const Home = () => {
 
   return (
     <div className="flex">
-      <div className="h-[92vh]">
+      <div className="h-[92vh] ">
         <Sidebar />
       </div>
 
-      <div className="pb-2 flex-1 h-screen">
+      <div className="pb-2 flex-1 h-screen ">
         <Routes>
           <Route path="/*" element={<Posts user={user && user} />} />
           <Route
