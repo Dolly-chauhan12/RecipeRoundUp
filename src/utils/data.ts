@@ -1,4 +1,4 @@
-export const searchQuery = (searchTerm) => {
+export const searchQuery = (searchTerm: string) => {
   const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] | order(_createdAt desc) {
         image{
           asset->{
@@ -19,7 +19,7 @@ export const searchQuery = (searchTerm) => {
   return query;
 };
 
-export const searchQueryByLikes = (searchTerm) => {
+export const searchQueryByLikes = (searchTerm: string) => {
   const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] |  order(count(likes) desc) {
         image{
           asset->{
@@ -39,7 +39,6 @@ export const searchQueryByLikes = (searchTerm) => {
           }`;
   return query;
 };
-
 
 export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
  _id,
@@ -79,8 +78,7 @@ export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc) 
    
   }`;
 
-
-export const postDetailQuery = (postId) => {
+export const postDetailQuery = (postId: string) => {
   const query = `*[_type == "post" && _id == '${postId}']{
         image{
           asset->{
@@ -111,12 +109,12 @@ export const postDetailQuery = (postId) => {
   return query;
 };
 
-export const userQuery = (userId) => {
+export const userQuery = (userId: string) => {
   const query = `*[_type == 'user' && _id == '${userId}']`;
   return query;
-}
+};
 // order(_createdAt desc)
-export const userCreatedPostsQuery = (userId) => {
+export const userCreatedPostsQuery = (userId: string) => {
   const query = `*[ _type == 'post' && userId == '${userId}'] | order(count(likes) desc)
   {
     _id,
@@ -148,7 +146,7 @@ export const userCreatedPostsQuery = (userId) => {
   return query;
 };
 
-export const userLikedPostsQuery = (userId) => {
+export const userLikedPostsQuery = (userId: string) => {
   const query = `*[_type == 'post' && '${userId}' in likes[]._ref ] | order(_createdAt desc) {
     _id,
      title,
@@ -178,4 +176,4 @@ export const userLikedPostsQuery = (userId) => {
 
   return query;
 };
-// 
+//

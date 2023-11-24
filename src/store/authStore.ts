@@ -1,21 +1,26 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { User } from "../types";
 
-const authStore = (set) => ({
-  userProfile: null,
+interface UserState {
+  userProfile: User | null;
 
-  addUser: (user) => set({ userProfile: user }),
+  addUser: (user: User) => void;
 
-  removeUser: () => set({ userProfile: null })
+  removeUser: () => void;
+}
 
-});
+const useAuthStore = create<UserState>()(
+  persist(
+    (set) => ({
+      userProfile: null,
 
+      addUser: (user) => set({ userProfile: user }),
 
-const useAuthStore = create(
-
-  persist(authStore, {
-    name: 'auth'
-  })
-)
+      removeUser: () => set({ userProfile: null }),
+    }),
+    { name: "auth" }
+  )
+);
 
 export default useAuthStore;
