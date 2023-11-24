@@ -5,8 +5,8 @@ import useAuthStore from "../store/authStore";
 import Posts from "./Posts";
 
 const Home = () => {
-  const [user, setUser] = useState();
   const { userProfile } = useAuthStore();
+  const [user, setUser] = useState<typeof userProfile>(null);
 
   useEffect(() => {
     setUser(userProfile);

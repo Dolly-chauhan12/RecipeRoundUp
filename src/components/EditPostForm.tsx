@@ -6,52 +6,71 @@ import { TagsInput } from "react-tag-input-component";
 import { MdDelete } from "react-icons/md";
 import { categories } from "../assets/constant";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-
-const EditPostForm = ({ post }) => {
-  const [title, setTitle] = useState(post.title);
-  const [recipe, setRecipe] = useState(post.recipe);
-  const [loading, setLoading] = useState(false);
-  const [imageChange, setImageChange] = useState(false);
-  const [category, setCategory] = useState(post.category);
-  const [ingredients, setIngredients] = useState(post.ingredients || []);
-  const [imageAsset, setImageAsset] = useState(post.image);
+import { RecipeDetail } from "../types";
+import { SanityImageAssetDocument } from "@sanity/client";
+interface EditFormProps {
+  post: RecipeDetail;
+}
+const EditPostForm = ({ post }: EditFormProps) => {
+  const [title, setTitle] = useState<string>(post.title);
+  const [recipe, setRecipe] = useState<string>(post.recipe);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [imageChange, setImageChange] = useState<boolean>(false);
+  const [category, setCategory] = useState<string>(post.category);
+  const [ingredients, setIngredients] = useState<string[]>(
+    post.ingredients || []
+  );
+  const [imageUrl, setImageUrl] = useState<string | null>(post.image.asset.url);
+  const [imageAsset, setImageAsset] = useState<SanityImageAssetDocument | null>(
+    null
+  );
   const [wrongImageType, setWrongImageType] = useState(false);
 
   const navigate = useNavigate();
 
-  const uploadImage = (e) => {
-    const selectedFile = e.target.files[0];
+  const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.currentTarget as HTMLInputElement;
+    if (target.files) {
+      const file = target.files[0];
+      const selectedFile = file;
 
-    if (
-      selectedFile.type === "image/png" ||
-      selectedFile.type === "image/svg" ||
-      selectedFile.type === "image/jpeg" ||
-      selectedFile.type === "image/gif" ||
-      selectedFile.type === "image/tiff"
-    ) {
-      setWrongImageType(false);
-      setLoading(true);
-      setImageChange(true);
-      client.assets
-        .upload("image", selectedFile, {
-          contentType: selectedFile.type,
-          filename: selectedFile.filename,
-        })
-        .then((document) => {
-          setImageAsset(document);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log("Upload failed", error.message);
-        });
-    } else {
-      setLoading(false);
-      setWrongImageType(true);
+      if (
+        selectedFile.type === "image/png" ||
+        selectedFile.type === "image/svg" ||
+        selectedFile.type === "image/jpeg" ||
+        selectedFile.type === "image/gif" ||
+        selectedFile.type === "image/tiff"
+      ) {
+        setWrongImageType(false);
+        setLoading(true);
+        setImageChange(true);
+        client.assets
+          .upload("image", selectedFile, {
+            contentType: selectedFile.type,
+            filename: selectedFile.name,
+          })
+          .then((document) => {
+            setImageAsset(document);
+
+            setLoading(false);
+            if (imageAsset) {
+              setImageUrl(imageAsset.url);
+            }
+          })
+          .catch((error) => {
+            setImageUrl(post.image.asset.url);
+            setImageAsset(null);
+            console.log("Upload failed", error.message);
+          });
+      } else {
+        setLoading(false);
+        setWrongImageType(true);
+      }
     }
   };
 
   const updateRecipe = () => {
-    if (title && recipe && category && imageAsset && !imageChange) {
+    if (title && recipe && category && !imageChange) {
       client
         .transaction([
           {
@@ -69,12 +88,12 @@ const EditPostForm = ({ post }) => {
         .commit()
         .then((updatedDoc) => {
           console.log("Hurray, the post is updated! New document:");
-          navigate("/");
+          navigate(`/user-profile/${post.postedBy._id}`);
         })
         .catch((err) => {
           console.error("Transaction failed: ", err.message);
         });
-    } else if (title && recipe && category && imageAsset?._id && imageChange) {
+    } else if (title && recipe && category && imageChange && imageAsset?._id) {
       client
         .transaction([
           {
@@ -92,7 +111,7 @@ const EditPostForm = ({ post }) => {
         .commit()
         .then((updatedDoc) => {
           console.log("Hurray, the post is updated with image! New document:");
-          navigate("/");
+          navigate(`/user-profile/${post.postedBy._id}`);
         });
     } else {
       alert("Please fill all fields accordingly...");
@@ -110,7 +129,7 @@ const EditPostForm = ({ post }) => {
           console.error("Delete failed: ", err.message);
         });
 
-      navigate("/");
+      navigate(`/user-profile/${post.postedBy._id}`);
     }
   };
 
@@ -225,13 +244,13 @@ const EditPostForm = ({ post }) => {
                   Recipe Image
                 </label>
                 <div className="mt-2 flex justify-center items-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 w-full h-420">
-                  {loading && <Spinner />}
+                  {loading && <Spinner message="wait a moment...." />}
                   {wrongImageType && (
                     <p className="text-red-500 transition-all duration-150 ease-in">
                       It&apos;s wrong file type.
                     </p>
                   )}
-                  {!imageAsset ? (
+                  {imageAsset === null && imageUrl === null ? (
                     // eslint-disable-next-line jsx-a11y/label-has-associated-control
                     <label>
                       <div className="flex flex-col items-center justify-center h-full">
@@ -258,7 +277,9 @@ const EditPostForm = ({ post }) => {
                     <div className="relative h-full">
                       <img
                         src={
-                          imageChange ? imageAsset?.url : imageAsset?.asset.url
+                          imageChange
+                            ? (imageAsset?.url as string)
+                            : (imageUrl as string)
                         }
                         alt="uploaded-pic"
                         className="h-full w-full"
@@ -266,7 +287,10 @@ const EditPostForm = ({ post }) => {
                       <button
                         type="button"
                         className="absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
-                        onClick={() => setImageAsset(null)}
+                        onClick={() => {
+                          setImageUrl(null);
+                          setImageAsset(null);
+                        }}
                       >
                         <MdDelete />
                       </button>

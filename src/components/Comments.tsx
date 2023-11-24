@@ -1,6 +1,11 @@
 import React from "react";
+import { RecipeDetail } from "../types";
 
-const Comments = ({ postDetail }) => {
+interface CommentsProps {
+  postDetail: RecipeDetail;
+}
+
+const Comments = ({ postDetail }: CommentsProps) => {
   return (
     <div className="max-h-370 overflow-y-auto mb-2 ">
       {postDetail?.comments?.length ? (

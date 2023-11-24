@@ -2,11 +2,18 @@ import React from "react";
 import { useState, useEffect } from "react";
 import useAuthStore from "../store/authStore";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { RecipePost } from "../types";
 
-const LikeButton = ({ likes, handleLike, flex }) => {
+interface Props {
+  likes: RecipePost["likes"];
+  handleLike: () => Promise<void>;
+  flex: string;
+}
+
+const LikeButton = ({ likes, handleLike, flex }: Props) => {
   const { userProfile } = useAuthStore();
 
-  const [alreadyLiked, setAlreadyLiked] = useState(false);
+  const [alreadyLiked, setAlreadyLiked] = useState<boolean>(false);
   let filterLikes = likes?.filter((item) => item._ref === userProfile?._id);
 
   useEffect(() => {

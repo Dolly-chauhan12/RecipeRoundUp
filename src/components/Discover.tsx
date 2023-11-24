@@ -4,7 +4,7 @@ import useQuery from "../utils/useQuery";
 import { categories } from "../assets/constant";
 
 const Discover = () => {
-  let query = useQuery();
+  let query: URLSearchParams = useQuery();
   const category = query.get("category");
 
   const activeTopicStyle =

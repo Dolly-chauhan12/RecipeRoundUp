@@ -5,6 +5,7 @@ import { ImCancelCircle } from "react-icons/im";
 import { Discover } from "./";
 import useAuthStore from "../store/authStore";
 import Logo from "../assets/logo3.png";
+//const Logo = require("..assets/logo3.png");
 
 const Sidebar = () => {
   const [showSidebar, setshowSidebar] = useState(true);

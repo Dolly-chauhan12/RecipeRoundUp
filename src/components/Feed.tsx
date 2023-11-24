@@ -8,13 +8,16 @@ import {
   searchQueryByLikes,
 } from "../utils/data";
 import { Spinner, RecipeCard, NoResult } from "./";
+import { RecipePost } from "../types";
 
 const Feed = () => {
-  const [posts, setPosts] = useState([]);
-  const [sortBy, setSortBy] = useState("dateCreated"); // Default sort option
+  const [posts, setPosts] = useState<RecipePost[]>([]);
+  const [sortBy, setSortBy] = useState<string>("dateCreated"); // Default sort option
 
-  const [loading, setLoading] = useState(false);
-  let query = useQuery();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  let query: URLSearchParams = useQuery();
+
   const categoryId = query.get("category");
 
   useEffect(() => {
@@ -47,7 +50,7 @@ const Feed = () => {
     }
   }, [categoryId, sortBy]);
 
-  const handleSortChange = (sortOption) => {
+  const handleSortChange = (sortOption: string) => {
     setSortBy(sortOption);
   };
 

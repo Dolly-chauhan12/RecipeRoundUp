@@ -3,9 +3,15 @@ import { RecipeCard, NoResult, Spinner } from "./";
 import { useEffect, useState } from "react";
 import { client } from "../client";
 import { searchQuery, feedQuery } from "../utils/data";
+import { RecipePost } from "../types";
+import { defaultRecipePost } from "../assets/constant";
 
-const Search = ({ searchTerm }) => {
-  const [posts, setPosts] = useState("");
+interface SearchProps {
+  searchTerm: string;
+}
+
+const Search = ({ searchTerm }: SearchProps) => {
+  const [posts, setPosts] = useState<RecipePost[]>([defaultRecipePost]);
   const [loading, setLoading] = useState(false);
 
   const fetchSearchPosts = () => {

@@ -6,12 +6,19 @@ import { postDetailQuery } from "../utils/data";
 import { v4 as uuidv4 } from "uuid";
 import { BsThreeDotsVertical, BsPencilSquare } from "react-icons/bs";
 import { LikeButton } from "./";
+import { RecipeDetail, User } from "../types";
+import { defaultRecipeDetail } from "../assets/constant";
+interface PostDetailProps {
+  user: User | null;
+}
 
-const PostDetail = ({ user }) => {
-  const { postId } = useParams();
-  const [postDetail, setPostDetail] = useState("");
+const PostDetail = ({ user }: PostDetailProps) => {
+  const { postId } = useParams() as { postId: string };
 
-  const [showMenubar, setshowMenubar] = useState(false);
+  const [postDetail, setPostDetail] =
+    useState<RecipeDetail>(defaultRecipeDetail);
+
+  const [showMenubar, setshowMenubar] = useState<boolean>(false);
 
   const fetchPostDetails = () => {
     const query = postDetailQuery(postId);
@@ -70,7 +77,7 @@ const PostDetail = ({ user }) => {
                   <LikeButton
                     likes={postDetail.likes}
                     flex="flex"
-                    handleLike={() => handleLike(true)}
+                    handleLike={() => handleLike()}
                   />
                 )}
               </div>

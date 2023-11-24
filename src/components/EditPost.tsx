@@ -3,10 +3,11 @@ import { useParams } from "react-router-dom";
 import { Spinner, EditPostForm } from "./";
 import { client } from "../client";
 import { postDetailQuery } from "../utils/data";
+import { RecipeDetail } from "../types";
 
 const EditPost = () => {
-  const { postId } = useParams();
-  const [post, setPost] = useState();
+  const { postId } = useParams() as { postId: string };
+  const [post, setPost] = useState<RecipeDetail>();
 
   const fetchPostDetails = () => {
     const query = postDetailQuery(postId);

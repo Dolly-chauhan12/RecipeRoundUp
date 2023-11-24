@@ -2,8 +2,21 @@ import React, { useState } from "react";
 import { client } from "../client";
 import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
+import { RecipeDetail, User } from "../types";
 
-const CreateComment = ({ user, postId, postDetail, setPostDetail }) => {
+interface CreateCommentProps {
+  user: User;
+  postId: string;
+  postDetail: RecipeDetail;
+  setPostDetail: React.Dispatch<React.SetStateAction<RecipeDetail>>;
+}
+
+const CreateComment = ({
+  user,
+  postId,
+  postDetail,
+  setPostDetail,
+}: CreateCommentProps) => {
   const [comment, setComment] = useState("");
   const [addingComment, setAddingComment] = useState(false);
 

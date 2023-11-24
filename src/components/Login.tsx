@@ -1,30 +1,30 @@
-import React from 'react'
-import { createOrGetUser } from '../utils/createOrGetUser';
-import { GoogleLogin } from '@react-oauth/google';
-import useAuthStore from '../store/authStore';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { createOrGetUser } from "../utils/createOrGetUser";
+import { GoogleLogin } from "@react-oauth/google";
+import useAuthStore from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-
   const { userProfile, addUser } = useAuthStore();
   const navigate = useNavigate();
 
   return (
     <div>
-      {userProfile
-        ? (<div> {userProfile.userName} </div>) :
-        (<GoogleLogin
-          onSuccess={credentialResponse => {
+      {userProfile ? (
+        <div> {userProfile.userName} </div>
+      ) : (
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
             createOrGetUser(credentialResponse, addUser);
-            navigate('/');
+            navigate("/");
           }}
           onError={() => {
-            console.log('Login Failed');
+            console.log("Login Failed");
           }}
-        />)}
+        />
+      )}
     </div>
+  );
+};
 
-  )
-}
-
-export default Login
+export default Login;

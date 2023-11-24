@@ -8,14 +8,20 @@ import {
   userLikedPostsQuery,
 } from "../utils/data";
 import { RecipeCard, NoResult, Spinner } from "./";
+import { User, UserPost } from "../types";
+import { defaultUserPost } from "../assets/constant";
 
-const UserDetail = ({ viewer }) => {
-  const [user, setUser] = useState("");
-  const [postsList, setPostsList] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showUserPost, setShowUserPost] = useState(true);
+interface UserDetailProps {
+  viewer: User | null;
+}
 
-  const { userId } = useParams();
+const UserDetail = ({ viewer }: UserDetailProps) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [postsList, setPostsList] = useState<UserPost[]>([defaultUserPost]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showUserPost, setShowUserPost] = useState<boolean>(true);
+
+  const { userId } = useParams() as { userId: string };
 
   const posted = showUserPost
     ? " border-b-2 border-green-800 text-green-800"
@@ -63,12 +69,12 @@ const UserDetail = ({ viewer }) => {
           <div className="flex items-center mt-2 gap-1 pt-1">
             <img
               className="rounded-full w-10 h-10 md:w-16 md:h-16 shadow-xl object-cover"
-              src={user.image}
+              src={user?.image}
               referrerPolicy="no-referrer"
               alt="user-pic"
             />
             <h1 className="font-bold text-sm md:text-3xl text-center mt-2 pl-2">
-              {user.userName}
+              {user?.userName}
             </h1>
           </div>
         </div>

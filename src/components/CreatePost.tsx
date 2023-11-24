@@ -6,21 +6,31 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { categories } from "../assets/constant";
 import { client } from "../client";
 import { Spinner } from "./";
+import { User } from "../types";
+import { SanityImageAssetDocument } from "@sanity/client";
 
-const CreatePost = ({ user }) => {
-  const [title, setTitle] = useState("");
-  const [recipe, setRecipe] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [fields, setFields] = useState();
-  const [category, setCategory] = useState();
-  const [ingredients, setIngredients] = useState([]);
-  const [imageAsset, setImageAsset] = useState();
-  const [wrongImageType, setWrongImageType] = useState(false);
+interface CreatePostProps {
+  user: User | null;
+}
+
+const CreatePost = ({ user }: CreatePostProps) => {
+  const [title, setTitle] = useState<string>("");
+  const [recipe, setRecipe] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [fields, setFields] = useState<boolean>(false);
+  const [category, setCategory] = useState<string>("Lunch");
+  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [imageAsset, setImageAsset] = useState<SanityImageAssetDocument | null>(
+    null
+  );
+  const [wrongImageType, setWrongImageType] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const uploadImage = (e) => {
-    const selectedFile = e.target.files[0];
+  const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const file = target.files![0];
+    const selectedFile = file;
 
     if (
       selectedFile.type === "image/png" ||
@@ -34,7 +44,7 @@ const CreatePost = ({ user }) => {
       client.assets
         .upload("image", selectedFile, {
           contentType: selectedFile.type,
-          filename: selectedFile.filename,
+          filename: selectedFile.name,
         })
         .then((document) => {
           setImageAsset(document);
@@ -51,7 +61,7 @@ const CreatePost = ({ user }) => {
   };
 
   const savePin = () => {
-    if (title && recipe && category && imageAsset?._id) {
+    if (title && recipe && category && imageAsset?._id && user) {
       const doc = {
         _type: "post",
         title,
@@ -107,7 +117,7 @@ const CreatePost = ({ user }) => {
         <div className=" flex lg:flex-row flex-col justify-center items-center bg-white lg:p-5 p-3  w-full">
           <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
             <div className=" flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
-              {loading && <Spinner />}
+              {loading && <Spinner message="Please wait for few moments..." />}
               {wrongImageType && (
                 <p className="text-red-500 transition-all duration-150 ease-in">
                   It&apos;s wrong file type.
@@ -216,8 +226,8 @@ const CreatePost = ({ user }) => {
         <div className="flex flex-col gap-1">
           <p className="font-semibold text:lg sm:text-xl"> Add recipe</p>
           <textarea
-            rows="10"
-            cols="30"
+            rows={10}
+            cols={30}
             value={recipe}
             onChange={(e) => setRecipe(e.target.value)}
             className="border-2 border-gray-400"

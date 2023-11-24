@@ -1,29 +1,51 @@
-import React, { useState } from 'react'
-import { Routes, Route } from 'react-router-dom';
-import { Navbar, Feed, PostDetail, CreatePost, Search , EditPost} from '../components';
+import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import {
+  Navbar,
+  Feed,
+  PostDetail,
+  CreatePost,
+  Search,
+  EditPost,
+} from "../components";
+import { User } from "../types";
 
-const Posts = ({ user }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+interface PostsProps {
+  user: User | null;
+}
+
+const Posts = ({ user }: PostsProps) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
-    <div className='px-2'>
-      <div className='bg-gray-50'>
-        <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} user={user} />
+    <div className="px-2">
+      <div className="bg-gray-50">
+        <Navbar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          user={user}
+        />
       </div>
-      <div className='h-full'>
+      <div className="h-full">
         <Routes>
           <Route path="/" element={<Feed />} />
           <Route path="/category" element={<Feed />} />
-          <Route path="/post-detail/:postId" element={<PostDetail user={user && user} />} />
-          <Route path="/post/edit/:postId" element={<EditPost user={user && user} />} />
+          <Route
+            path="/post-detail/:postId"
+            element={<PostDetail user={user && user} />}
+          />
+          <Route path="/post/edit/:postId" element={<EditPost />} />
 
-          <Route path="/create-post" element={<CreatePost user={user && user} />} />
+          <Route
+            path="/create-post"
+            element={<CreatePost user={user && user} />}
+          />
 
-          <Route path="/search" element={<Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />} />
+          <Route path="/search" element={<Search searchTerm={searchTerm} />} />
         </Routes>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Posts
+export default Posts;

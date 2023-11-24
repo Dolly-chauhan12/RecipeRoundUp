@@ -1,8 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { GoVerified } from "react-icons/go";
+import { RecipePost } from "../types";
 
-const RecipeCard = ({ post, searchPage }) => {
+interface RecipeCardProps {
+  post: RecipePost;
+  searchPage?: boolean;
+}
+
+const RecipeCard = ({ post, searchPage }: RecipeCardProps) => {
   const { postedBy, image, _id, title, recipe, likes } = post;
 
   return (
@@ -19,7 +25,6 @@ const RecipeCard = ({ post, searchPage }) => {
                   src={postedBy?.image}
                   referrerPolicy="no-referrer"
                   alt="user-profile"
-                  layout="responsive"
                 />
               </>
             </Link>
