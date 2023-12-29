@@ -9,6 +9,7 @@ export { default as UserDetail } from "./UserDetail";
 export { default as PostDetail } from "./PostDetail";
 export { default as RecipeCard } from "./RecipeCard";
 export { default as Spinner } from "./Spinner";
+export { default as PageLoaderSpinner } from "./PageLoaderSpinner";
 export { default as NoResult } from "./NoResult";
 export { default as LikeButton } from "./LikeButton";
 export { default as EditPost } from "./EditPost";

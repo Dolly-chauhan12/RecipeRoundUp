@@ -5,7 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { categories } from "../assets/constant";
 import { client } from "../client";
-import { Spinner } from "./";
+import { PageLoaderSpinner, Spinner } from "./";
 import { User } from "../types";
 import { SanityImageAssetDocument } from "@sanity/client";
 
@@ -24,6 +24,8 @@ const CreatePost = ({ user }: CreatePostProps) => {
     null
   );
   const [wrongImageType, setWrongImageType] = useState<boolean>(false);
+
+  const [pageCreate, setPageCreate] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -62,6 +64,7 @@ const CreatePost = ({ user }: CreatePostProps) => {
 
   const savePin = () => {
     if (title && recipe && category && imageAsset?._id && user) {
+      setPageCreate(true);
       const doc = {
         _type: "post",
         title,
@@ -83,6 +86,7 @@ const CreatePost = ({ user }: CreatePostProps) => {
         },
       };
       client.create(doc).then(() => {
+        setPageCreate(false);
         navigate("/");
       });
     } else {
@@ -94,7 +98,10 @@ const CreatePost = ({ user }: CreatePostProps) => {
       }, 2500);
     }
   };
-
+  if (pageCreate)
+    return (
+      <PageLoaderSpinner message={"Creating new post and moving to feed..."} />
+    );
   return (
     <div className="flex flex-col pb-2">
       <div className="flex flex-col  mt-5 lg:h-4/5 ">

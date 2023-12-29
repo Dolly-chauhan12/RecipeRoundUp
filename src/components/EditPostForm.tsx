@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { client } from "../client";
-import { Spinner } from "./";
+import { PageLoaderSpinner, Spinner } from "./";
 import { TagsInput } from "react-tag-input-component";
 import { MdDelete } from "react-icons/md";
 import { categories } from "../assets/constant";
@@ -15,6 +15,7 @@ const EditPostForm = ({ post }: EditFormProps) => {
   const [title, setTitle] = useState<string>(post.title);
   const [recipe, setRecipe] = useState<string>(post.recipe);
   const [loading, setLoading] = useState<boolean>(false);
+  const [pageUpdating, setPageUpdating] = useState<boolean>(false);
   const [imageChange, setImageChange] = useState<boolean>(false);
   const [category, setCategory] = useState<string>(post.category);
   const [ingredients, setIngredients] = useState<string[]>(
@@ -71,6 +72,7 @@ const EditPostForm = ({ post }: EditFormProps) => {
 
   const updateRecipe = () => {
     if (title && recipe && category && !imageChange) {
+      setPageUpdating(true);
       client
         .transaction([
           {
@@ -88,12 +90,14 @@ const EditPostForm = ({ post }: EditFormProps) => {
         .commit()
         .then((updatedDoc) => {
           console.log("Hurray, the post is updated! New document:");
+          setPageUpdating(false);
           navigate(`/user-profile/${post.postedBy._id}`);
         })
         .catch((err) => {
           console.error("Transaction failed: ", err.message);
         });
     } else if (title && recipe && category && imageChange && imageAsset?._id) {
+      setPageUpdating(true);
       client
         .transaction([
           {
@@ -111,6 +115,7 @@ const EditPostForm = ({ post }: EditFormProps) => {
         .commit()
         .then((updatedDoc) => {
           console.log("Hurray, the post is updated with image! New document:");
+          setPageUpdating(false);
           navigate(`/user-profile/${post.postedBy._id}`);
         });
     } else {
@@ -120,6 +125,7 @@ const EditPostForm = ({ post }: EditFormProps) => {
 
   const deleteRecipe = () => {
     if (window.confirm("Are you sure you want to delete this post ?")) {
+      setPageUpdating(true);
       client
         .delete(post._id)
         .then(() => {
@@ -128,10 +134,15 @@ const EditPostForm = ({ post }: EditFormProps) => {
         .catch((err) => {
           console.error("Delete failed: ", err.message);
         });
-
+      setPageUpdating(false);
       navigate(`/user-profile/${post.postedBy._id}`);
     }
   };
+
+  if (pageUpdating)
+    return (
+      <PageLoaderSpinner message={"Updating and moving to all your posts..."} />
+    );
 
   return (
     <div className="px-2 py-3">
