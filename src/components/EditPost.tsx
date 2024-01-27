@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Spinner, EditPostForm } from "./";
+import { Spinner, EditPostForm, AccessDenied } from "./";
 import { client } from "../client";
+import useAuthStore from "../store/authStore";
 import { postDetailQuery } from "../utils/data";
 import { RecipeDetail } from "../types";
 
 const EditPost = () => {
+  const { userProfile } = useAuthStore();
   const { postId } = useParams() as { postId: string };
   const [post, setPost] = useState<RecipeDetail>();
 
@@ -26,6 +28,10 @@ const EditPost = () => {
 
   if (!post) {
     return <Spinner message="Please wait a moment , fetching post details" />;
+  }
+
+  if (userProfile && userProfile._id !== post?.postedBy._id) {
+    return <AccessDenied />;
   }
 
   return <EditPostForm post={post} />;
