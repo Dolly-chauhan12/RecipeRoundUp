@@ -8,6 +8,7 @@ import {
   Search,
   EditPost,
 } from "../components";
+import PrivateRoutes from "../utils/PrivateRoutes";
 import { User } from "../types";
 
 interface PostsProps {
@@ -34,14 +35,17 @@ const Posts = ({ user }: PostsProps) => {
             path="/post-detail/:postId"
             element={<PostDetail user={user && user} />}
           />
-          <Route path="/post/edit/:postId" element={<EditPost />} />
-
-          <Route
-            path="/create-post"
-            element={<CreatePost user={user && user} />}
-          />
-
           <Route path="/search" element={<Search searchTerm={searchTerm} />} />
+        </Routes>
+
+        <Routes>
+          <Route element={<PrivateRoutes />}>
+            <Route
+              path="/create-post"
+              element={<CreatePost user={user && user} />}
+            />
+            <Route path="/post/edit/:postId" element={<EditPost />} />
+          </Route>
         </Routes>
       </div>
     </div>
