@@ -16,3 +16,4 @@ export { default as EditPost } from "./EditPost";
 export { default as EditPostForm } from "./EditPostForm";
 export { default as Comments } from "./Comments";
 export { default as CreateComment } from "./CreateComment";
+export { default as AccessDenied } from "./AccessDenied";
