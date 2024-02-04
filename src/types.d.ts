@@ -31,6 +31,7 @@ export interface RecipePost {
   userId: string;
   likes: UserRefrence[];
   postedBy: User;
+  _createdAt: string;
 }
 
 export interface RecipeDetail {
@@ -53,4 +54,5 @@ export interface UserPost {
   image: RecipeImage;
   title: string;
   likes: UserRefrence[];
+  _createdAt: string;
 }

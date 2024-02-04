@@ -40,7 +40,7 @@ export const searchQueryByLikes = (searchTerm: string) => {
   return query;
 };
 
-export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
+export const feedQuery = `*[_type == "post"] | order(_createdAt desc)[0...10] {
  _id,
      title,
        image{
@@ -56,10 +56,11 @@ export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
         image
       },
     likes,
+    _createdAt
    
   }`;
 
-export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc) {
+export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc)[0...10] {
  _id,
      title,
        image{
@@ -176,4 +177,32 @@ export const userLikedPostsQuery = (userId: string) => {
 
   return query;
 };
+
+export const nextPageQuery = (lastId: string, lastCreatedAt: string) => {
+  const query = `*[_type == 'post' && (
+    _createdAt < '${lastCreatedAt}'
+    || (_createdAt == '${lastCreatedAt}' && _id > '${lastId}')
+  )] | order(_createdAt desc)[0...10] {
+    _id,
+        title,
+          image{
+           asset->{
+             url
+           }
+         },
+         userId,
+         recipe,
+         postedBy->{
+           _id,
+           userName,
+           image
+         },
+       likes,
+       _createdAt
+      
+     }`;
+
+  return query;
+};
+
 //
