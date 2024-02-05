@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import InfiniteScroll from "react-infinite-scroller";
 import useQuery from "../utils/useQuery";
 import { client } from "../client";
 import {
@@ -6,11 +7,11 @@ import {
   feedQueryByLikes,
   searchQuery,
   searchQueryByLikes,
-  nextPageQuery,
+  nextPageQueryFeed,
+  nextPageQueryFeedByLikes,
 } from "../utils/data";
 import { Spinner, RecipeCard, NoResult } from "./";
 import { RecipePost } from "../types";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 const Feed = () => {
   const [posts, setPosts] = useState<RecipePost[]>([]);
@@ -21,13 +22,14 @@ const Feed = () => {
 
   const lastId = useRef<string | null>(null);
   const lastCreatedAt = useRef<string | null>(null);
+  const lastLikesCount = useRef<number | null>(null);
 
   let query: URLSearchParams = useQuery();
 
   const categoryId = query.get("category");
 
   useEffect(() => {
-    let results: string | any[] = [];
+    let results: RecipePost[] = [];
     console.log("results", results);
     if (categoryId) {
       setLoading(true);
@@ -46,6 +48,13 @@ const Feed = () => {
         setPosts(data);
         setLoading(false);
         results = data;
+
+        if (results.length > 0) {
+          lastCreatedAt.current = results[results.length - 1]._createdAt;
+          lastId.current = results[results.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
       });
     } else {
       setLoading(true);
@@ -63,56 +72,72 @@ const Feed = () => {
         setPosts(data);
         setLoading(false);
         results = data;
+
+        if (results.length > 0) {
+          if (sortBy === "likeCount") {
+            lastLikesCount.current = results[results.length - 1].likes.length;
+          } else {
+            lastCreatedAt.current = results[results.length - 1]._createdAt;
+          }
+
+          lastId.current = results[results.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
       });
     }
     console.log(results);
-    if (results.length > 0) {
-      lastCreatedAt.current = results[results.length - 1]._createdAt;
-      lastId.current = results[results.length - 1]._id;
-    } else {
-      lastId.current = null; // Reached the end
-    }
   }, [categoryId, sortBy]);
 
   const handleSortChange = (sortOption: string) => {
     setSortBy(sortOption);
   };
 
-  const fetchNextPage = async () => {
+  const fetchNextData = async () => {
     console.log("reached here");
+
     if (lastId === null || lastCreatedAt === null) {
       console.log("exited bcz of null");
       return;
     }
-    setLoading(true);
-    console.log(
-      "before fetching value of refreces",
-      lastId.current,
-      " refrence of lastCreatedAt",
-      lastCreatedAt.current
-    );
-    let queryTerm = nextPageQuery(
-      lastId.current as string,
-      lastCreatedAt.current as string
-    );
-    const result = await client.fetch(queryTerm);
-    console.log(result);
+    console.log("reached here 1");
+    if (sortBy === "likeCount") {
+      let queryTerm = nextPageQueryFeedByLikes(
+        lastId.current as string,
+        lastLikesCount.current as number
+      );
+      console.log("reached here 2");
+      const result = await client.fetch(queryTerm);
+      console.log(result);
+      console.log("reached here 3");
 
-    if (result.length > 0) {
-      lastCreatedAt.current = result[result.length - 1]._createdAt;
-      lastId.current = result[result.length - 1]._id;
+      if (result.length > 0) {
+        lastLikesCount.current = result[result.length - 1].likes.length;
+        lastId.current = result[result.length - 1]._id;
+      } else {
+        lastId.current = null; // Reached the end
+      }
+      setPosts((current) => [...current, ...result]);
+
+      return;
     } else {
-      lastId.current = null; // Reached the end
+      let queryTerm = nextPageQueryFeed(
+        lastId.current as string,
+        lastCreatedAt.current as string
+      );
+      const result = await client.fetch(queryTerm);
+      console.log(result);
+
+      if (result.length > 0) {
+        lastCreatedAt.current = result[result.length - 1]._createdAt;
+        lastId.current = result[result.length - 1]._id;
+      } else {
+        lastId.current = null; // Reached the end
+      }
+      setPosts((current) => [...current, ...result]);
+
+      return;
     }
-    console.log(
-      "After fetching value of refrences",
-      lastId.current,
-      " refrence of lastCreatedAt",
-      lastCreatedAt.current
-    );
-    setPosts(result);
-    setLoading(false);
-    return;
   };
   const ideaName = categoryId || "new";
 
@@ -153,32 +178,16 @@ const Feed = () => {
             </button>
           </div>
 
-          {posts.map((post) => (
-            <RecipeCard post={post} key={post._id} />
-          ))}
-
-          {totalPosts > 10 ? (
-            <div className="w-full flex justify-between my-3 text-white">
-              <button
-                type="button"
-                className="flex items-center gap-2 text-xl rounded-md bg-green-900 px-3 py-2 font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-900"
-              >
-                <FaAngleLeft />
-
-                <span>Prev</span>
-              </button>
-              <button
-                type="button"
-                onClick={fetchNextPage}
-                className="flex items-center gap-2 text-xl rounded-md bg-green-900 px-3 py-2 font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-900"
-              >
-                <span>Next</span>
-                <FaAngleRight />
-              </button>
-            </div>
-          ) : (
-            <> </>
-          )}
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={fetchNextData}
+            hasMore={posts.length < totalPosts}
+            loader={<Spinner message="Fetching new recipes for you..." />}
+          >
+            {posts.map((post) => (
+              <RecipeCard post={post} key={post._id} />
+            ))}
+          </InfiniteScroll>
         </>
       ) : (
         <NoResult text={`Sorry , No Recipes Found`} />

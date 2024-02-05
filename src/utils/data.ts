@@ -75,7 +75,7 @@ export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc)[
         userName,
         image
       },
-    likes[],
+    likes,
    
   }`;
 
@@ -178,11 +178,40 @@ export const userLikedPostsQuery = (userId: string) => {
   return query;
 };
 
-export const nextPageQuery = (lastId: string, lastCreatedAt: string) => {
+export const nextPageQueryFeed = (lastId: string, lastCreatedAt: string) => {
   const query = `*[_type == 'post' && (
     _createdAt < '${lastCreatedAt}'
     || (_createdAt == '${lastCreatedAt}' && _id > '${lastId}')
   )] | order(_createdAt desc)[0...10] {
+    _id,
+        title,
+          image{
+           asset->{
+             url
+           }
+         },
+         userId,
+         recipe,
+         postedBy->{
+           _id,
+           userName,
+           image
+         },
+       likes,
+       _createdAt
+      
+     }`;
+
+  return query;
+};
+export const nextPageQueryFeedByLikes = (
+  lastId: string,
+  lastLikesCount: number
+) => {
+  const query = `*[_type == 'post' && (
+    count(likes) < ${lastLikesCount}
+    || (count(likes) == ${lastLikesCount} && _id > '${lastId}')
+  )] | order(count(likes) desc)[0...10] {
     _id,
         title,
           image{
