@@ -1,5 +1,5 @@
 export const searchQuery = (searchTerm: string) => {
-  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] | order(_createdAt desc) {
+  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] | order(_createdAt desc)[0...10] {
         image{
           asset->{
             url
@@ -15,12 +15,13 @@ export const searchQuery = (searchTerm: string) => {
               image
             },
            likes[],
+           _createdAt
           }`;
   return query;
 };
 
 export const searchQueryByLikes = (searchTerm: string) => {
-  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] |  order(count(likes) desc) {
+  const query = `*[_type == "post" && title match '${searchTerm}*' || category match '${searchTerm}*'] |  order(count(likes) desc)[0...10] {
         image{
           asset->{
             url
@@ -40,7 +41,7 @@ export const searchQueryByLikes = (searchTerm: string) => {
   return query;
 };
 
-export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
+export const feedQuery = `*[_type == "post"] | order(_createdAt desc)[0...10] {
  _id,
      title,
        image{
@@ -56,10 +57,11 @@ export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
         image
       },
     likes,
+    _createdAt
    
   }`;
 
-export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc) {
+export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc)[0...10] {
  _id,
      title,
        image{
@@ -74,7 +76,7 @@ export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc) 
         userName,
         image
       },
-    likes[],
+    likes,
    
   }`;
 
@@ -176,4 +178,118 @@ export const userLikedPostsQuery = (userId: string) => {
 
   return query;
 };
+
+export const nextPageQueryFeed = (lastId: string, lastCreatedAt: string) => {
+  const query = `*[_type == 'post' && (
+    _createdAt < '${lastCreatedAt}'
+    || (_createdAt == '${lastCreatedAt}' && _id > '${lastId}')
+  )] | order(_createdAt desc)[0...10] {
+    _id,
+        title,
+          image{
+           asset->{
+             url
+           }
+         },
+         userId,
+         recipe,
+         postedBy->{
+           _id,
+           userName,
+           image
+         },
+       likes,
+       _createdAt
+      
+     }`;
+
+  return query;
+};
+export const nextPageQueryFeedByLikes = (
+  lastId: string,
+  lastLikesCount: number
+) => {
+  const query = `*[_type == 'post' && (
+    count(likes) < ${lastLikesCount}
+    || (count(likes) == ${lastLikesCount} && _id > '${lastId}')
+  )] | order(count(likes) desc)[0...10] {
+    _id,
+        title,
+          image{
+           asset->{
+             url
+           }
+         },
+         userId,
+         recipe,
+         postedBy->{
+           _id,
+           userName,
+           image
+         },
+       likes,
+       _createdAt
+      
+     }`;
+
+  return query;
+};
+
+export const nextPageQueryCategory = (
+  searchTerm: string,
+  lastId: string,
+  lastCreatedAt: string
+) => {
+  const query = `*[_type == "post" && (title match '${searchTerm}*' || category match '${searchTerm}*') &&  (
+    _createdAt < '${lastCreatedAt}'
+    || (_createdAt == '${lastCreatedAt}' && _id > '${lastId}')
+  )] | order(_createdAt desc)[0...10] {
+        image{
+          asset->{
+            url
+          }
+        },
+            _id,
+            title,
+            userId,
+            recipe,
+            postedBy->{
+              _id,
+              userName,
+              image
+            },
+           likes[],
+           _createdAt
+          }`;
+  return query;
+};
+
+export const nextPageQueryCategoryByLikes = (
+  searchTerm: string,
+  lastId: string,
+  lastLikesCount: number
+) => {
+  const query = `*[_type == "post" && (title match '${searchTerm}*' || category match '${searchTerm}*') && (
+    count(likes) < ${lastLikesCount}
+    || (count(likes) == ${lastLikesCount} && _id > '${lastId}')
+  )] |  order(count(likes) desc)[0...10] {
+        image{
+          asset->{
+            url
+          }
+        },
+            _id,
+            title,
+            userId,
+            recipe,
+            postedBy->{
+              _id,
+              userName,
+              image
+            },
+           likes[],
+          }`;
+  return query;
+};
+
 //

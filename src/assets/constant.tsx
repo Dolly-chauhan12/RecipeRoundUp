@@ -112,6 +112,7 @@ export const defaultRecipePost: RecipePost = {
   },
   userId: "10829396",
   recipe: "",
+  _createdAt: "2023-06-01T17:02:40Z",
 };
 
 export const defaultUserPost: UserPost = {
@@ -135,6 +136,7 @@ export const defaultUserPost: UserPost = {
     },
   },
   userId: "10829396",
+  _createdAt: "2023-06-01T17:02:40Z",
 };
 
 /*

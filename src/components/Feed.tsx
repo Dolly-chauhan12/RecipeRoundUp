@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import InfiniteScroll from "react-infinite-scroller";
 import useQuery from "../utils/useQuery";
 import { client } from "../client";
 import {
@@ -6,6 +7,10 @@ import {
   feedQueryByLikes,
   searchQuery,
   searchQueryByLikes,
+  nextPageQueryFeed,
+  nextPageQueryFeedByLikes,
+  nextPageQueryCategory,
+  nextPageQueryCategoryByLikes,
 } from "../utils/data";
 import { Spinner, RecipeCard, NoResult } from "./";
 import { RecipePost } from "../types";
@@ -15,14 +20,26 @@ const Feed = () => {
   const [sortBy, setSortBy] = useState<string>("dateCreated"); // Default sort option
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [totalPosts, setTotalPosts] = useState<number>(0);
+
+  const lastId = useRef<string | null>(null);
+  const lastCreatedAt = useRef<string | null>(null);
+  const lastLikesCount = useRef<number | null>(null);
 
   let query: URLSearchParams = useQuery();
 
   const categoryId = query.get("category");
 
   useEffect(() => {
+    let results: RecipePost[] = [];
+    console.log("results", results);
     if (categoryId) {
       setLoading(true);
+      client
+        .fetch(
+          `count(*[_type == "post" && title match '${categoryId}*' || category match '${categoryId}*'])`
+        )
+        .then((data) => setTotalPosts(data));
       let queryTerm;
       if (sortBy === "likeCount") {
         queryTerm = searchQueryByLikes(categoryId);
@@ -32,10 +49,24 @@ const Feed = () => {
       client.fetch(queryTerm).then((data) => {
         setPosts(data);
         setLoading(false);
+        results = data;
+
+        if (results.length > 0) {
+          if (sortBy === "likeCount") {
+            lastLikesCount.current = results[results.length - 1].likes.length;
+          } else {
+            lastCreatedAt.current = results[results.length - 1]._createdAt;
+          }
+          lastId.current = results[results.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
       });
     } else {
       setLoading(true);
-
+      client
+        .fetch(`count(*[_type == "post"])`)
+        .then((data) => setTotalPosts(data));
       let queryTerm;
       if (sortBy === "likeCount") {
         queryTerm = feedQueryByLikes;
@@ -46,14 +77,117 @@ const Feed = () => {
       client.fetch(queryTerm).then((data) => {
         setPosts(data);
         setLoading(false);
+        results = data;
+
+        if (results.length > 0) {
+          if (sortBy === "likeCount") {
+            lastLikesCount.current = results[results.length - 1].likes.length;
+          } else {
+            lastCreatedAt.current = results[results.length - 1]._createdAt;
+          }
+
+          lastId.current = results[results.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
       });
     }
+    console.log(results);
   }, [categoryId, sortBy]);
 
   const handleSortChange = (sortOption: string) => {
     setSortBy(sortOption);
   };
 
+  const fetchNextData = async () => {
+    console.log("reached here");
+
+    if (lastId === null || lastCreatedAt === null) {
+      console.log("exited bcz of null");
+      return;
+    }
+    console.log("reached here 1");
+
+    if (categoryId) {
+      if (sortBy === "likeCount") {
+        let queryTerm = nextPageQueryCategoryByLikes(
+          categoryId,
+          lastId.current as string,
+          lastLikesCount.current as number
+        );
+        console.log("reached here 2");
+        const result = await client.fetch(queryTerm);
+        console.log(result);
+        console.log("reached here 3");
+
+        if (result.length > 0) {
+          lastLikesCount.current = result[result.length - 1].likes.length;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
+      } else {
+        let queryTerm = nextPageQueryCategory(
+          categoryId,
+          lastId.current as string,
+          lastCreatedAt.current as string
+        );
+        const result = await client.fetch(queryTerm);
+        console.log(result);
+
+        if (result.length > 0) {
+          lastCreatedAt.current = result[result.length - 1]._createdAt;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
+      }
+    } else {
+      if (sortBy === "likeCount") {
+        let queryTerm = nextPageQueryFeedByLikes(
+          lastId.current as string,
+          lastLikesCount.current as number
+        );
+        console.log("reached here 2");
+        const result = await client.fetch(queryTerm);
+        console.log(result);
+        console.log("reached here 3");
+
+        if (result.length > 0) {
+          lastLikesCount.current = result[result.length - 1].likes.length;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
+      } else {
+        let queryTerm = nextPageQueryFeed(
+          lastId.current as string,
+          lastCreatedAt.current as string
+        );
+        const result = await client.fetch(queryTerm);
+        console.log(result);
+
+        if (result.length > 0) {
+          lastCreatedAt.current = result[result.length - 1]._createdAt;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
+      }
+    }
+  };
   const ideaName = categoryId || "new";
 
   const buttonStyle =
@@ -93,9 +227,16 @@ const Feed = () => {
             </button>
           </div>
 
-          {posts.map((post) => (
-            <RecipeCard post={post} key={post._id} />
-          ))}
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={fetchNextData}
+            hasMore={posts.length < totalPosts}
+            loader={<Spinner message="Fetching new recipes for you..." />}
+          >
+            {posts.map((post) => (
+              <RecipeCard post={post} key={post._id} />
+            ))}
+          </InfiniteScroll>
         </>
       ) : (
         <NoResult text={`Sorry , No Recipes Found`} />
