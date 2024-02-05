@@ -9,6 +9,8 @@ import {
   searchQueryByLikes,
   nextPageQueryFeed,
   nextPageQueryFeedByLikes,
+  nextPageQueryCategory,
+  nextPageQueryCategoryByLikes,
 } from "../utils/data";
 import { Spinner, RecipeCard, NoResult } from "./";
 import { RecipePost } from "../types";
@@ -50,7 +52,11 @@ const Feed = () => {
         results = data;
 
         if (results.length > 0) {
-          lastCreatedAt.current = results[results.length - 1]._createdAt;
+          if (sortBy === "likeCount") {
+            lastLikesCount.current = results[results.length - 1].likes.length;
+          } else {
+            lastCreatedAt.current = results[results.length - 1]._createdAt;
+          }
           lastId.current = results[results.length - 1]._id;
         } else {
           lastId.current = null; // Reached the end
@@ -101,42 +107,85 @@ const Feed = () => {
       return;
     }
     console.log("reached here 1");
-    if (sortBy === "likeCount") {
-      let queryTerm = nextPageQueryFeedByLikes(
-        lastId.current as string,
-        lastLikesCount.current as number
-      );
-      console.log("reached here 2");
-      const result = await client.fetch(queryTerm);
-      console.log(result);
-      console.log("reached here 3");
 
-      if (result.length > 0) {
-        lastLikesCount.current = result[result.length - 1].likes.length;
-        lastId.current = result[result.length - 1]._id;
+    if (categoryId) {
+      if (sortBy === "likeCount") {
+        let queryTerm = nextPageQueryCategoryByLikes(
+          categoryId,
+          lastId.current as string,
+          lastLikesCount.current as number
+        );
+        console.log("reached here 2");
+        const result = await client.fetch(queryTerm);
+        console.log(result);
+        console.log("reached here 3");
+
+        if (result.length > 0) {
+          lastLikesCount.current = result[result.length - 1].likes.length;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
       } else {
-        lastId.current = null; // Reached the end
-      }
-      setPosts((current) => [...current, ...result]);
+        let queryTerm = nextPageQueryCategory(
+          categoryId,
+          lastId.current as string,
+          lastCreatedAt.current as string
+        );
+        const result = await client.fetch(queryTerm);
+        console.log(result);
 
-      return;
+        if (result.length > 0) {
+          lastCreatedAt.current = result[result.length - 1]._createdAt;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
+      }
     } else {
-      let queryTerm = nextPageQueryFeed(
-        lastId.current as string,
-        lastCreatedAt.current as string
-      );
-      const result = await client.fetch(queryTerm);
-      console.log(result);
+      if (sortBy === "likeCount") {
+        let queryTerm = nextPageQueryFeedByLikes(
+          lastId.current as string,
+          lastLikesCount.current as number
+        );
+        console.log("reached here 2");
+        const result = await client.fetch(queryTerm);
+        console.log(result);
+        console.log("reached here 3");
 
-      if (result.length > 0) {
-        lastCreatedAt.current = result[result.length - 1]._createdAt;
-        lastId.current = result[result.length - 1]._id;
+        if (result.length > 0) {
+          lastLikesCount.current = result[result.length - 1].likes.length;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
       } else {
-        lastId.current = null; // Reached the end
-      }
-      setPosts((current) => [...current, ...result]);
+        let queryTerm = nextPageQueryFeed(
+          lastId.current as string,
+          lastCreatedAt.current as string
+        );
+        const result = await client.fetch(queryTerm);
+        console.log(result);
 
-      return;
+        if (result.length > 0) {
+          lastCreatedAt.current = result[result.length - 1]._createdAt;
+          lastId.current = result[result.length - 1]._id;
+        } else {
+          lastId.current = null; // Reached the end
+        }
+        setPosts((current) => [...current, ...result]);
+
+        return;
+      }
     }
   };
   const ideaName = categoryId || "new";
