@@ -9,7 +9,7 @@ const Landing = () => {
         className="flex 
        h-full w-full"
       >
-        <div className="w-1/2 px-6 flex flex-col gap-4 py-36">
+        <div className="w-full lg:w-1/2 px-3 lg:px-6 flex flex-col gap-4 py-24 lg:py-36">
           <h2 className="font-poppins text-6xl">
             Discover Simple, Delicious and
             <br />
@@ -25,7 +25,7 @@ const Landing = () => {
           </Link>
         </div>
 
-        <div className="w-1/2 ">
+        <div className="w-1/2 hidden lg:block">
           <img
             src={heroimg}
             alt="hero image"
