@@ -46,7 +46,7 @@ const CreateComment = ({
   return (
     <>
       <div className="flex flex-wrap mt-2 mb-2 gap-3">
-        <Link to={`/user-profile/${user._id}`}>
+        <Link to={`/home/user-profile/${user._id}`}>
           <img
             src={user.image}
             className="w-10 h-10 rounded-full cursor-pointer"

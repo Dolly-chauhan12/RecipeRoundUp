@@ -16,7 +16,7 @@ const RecipeCard = ({ post, searchPage }: RecipeCardProps) => {
       <div>
         <div className="flex gap-1.5 p-2 cursor-pointer font-semibold rounded ">
           <div className="md:w-14 md:h-12 w-10 h-10 pl-1">
-            <Link to={`/user-profile/${postedBy?._id}`}>
+            <Link to={`/home/user-profile/${postedBy?._id}`}>
               <>
                 <img
                   width={44}
@@ -30,7 +30,7 @@ const RecipeCard = ({ post, searchPage }: RecipeCardProps) => {
             </Link>
           </div>
           <div className="md:w-60 md:h-12 w-30 h-10 flex items-center">
-            <Link to={`/user-profile/${postedBy?._id}`}>
+            <Link to={`/home/user-profile/${postedBy?._id}`}>
               <p className="flex gap-2 items-center md:text-lg font-bold  hover:underline font-PTserif">
                 {postedBy.userName}{" "}
                 <GoVerified className="text-blue-400 text-md" />
@@ -42,7 +42,7 @@ const RecipeCard = ({ post, searchPage }: RecipeCardProps) => {
 
       <div className="lg:ml-20 flex gap-4 relative ml-3">
         <div>
-          <Link to={`/post-detail/${_id}`}>
+          <Link to={`/home/post-detail/${_id}`}>
             <h2 className=" font-semibold text-2xl mb-1 line-clamp-1 px-2 font-hind">
               {title}{" "}
             </h2>

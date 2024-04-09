@@ -18,7 +18,7 @@ const Landing = () => {
           <p className="font-lexend text-2xl font-semibold">
             No one is born a great cook. One learns by doing.
           </p>
-          <Link to="/">
+          <Link to="/home">
             <button className="bg-black text-white px-6 py-3 rounded-full text-2xl font-montaguSlab">
               Explore
             </button>

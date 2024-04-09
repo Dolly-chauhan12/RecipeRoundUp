@@ -16,7 +16,7 @@ const Login = () => {
         <GoogleLogin
           onSuccess={(credentialResponse) => {
             createOrGetUser(credentialResponse, addUser);
-            navigate("/");
+            navigate("/home");
           }}
           onError={() => {
             console.log("Login Failed");

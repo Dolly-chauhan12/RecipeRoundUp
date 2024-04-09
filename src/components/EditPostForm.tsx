@@ -91,7 +91,7 @@ const EditPostForm = ({ post }: EditFormProps) => {
         .then((updatedDoc) => {
           console.log("Hurray, the post is updated! New document:");
           setPageUpdating(false);
-          navigate(`/user-profile/${post.postedBy._id}`);
+          navigate(`/home/user-profile/${post.postedBy._id}`);
         })
         .catch((err) => {
           console.error("Transaction failed: ", err.message);
@@ -116,7 +116,7 @@ const EditPostForm = ({ post }: EditFormProps) => {
         .then((updatedDoc) => {
           console.log("Hurray, the post is updated with image! New document:");
           setPageUpdating(false);
-          navigate(`/user-profile/${post.postedBy._id}`);
+          navigate(`/home/user-profile/${post.postedBy._id}`);
         });
     } else {
       alert("Please fill all fields accordingly...");
@@ -135,7 +135,7 @@ const EditPostForm = ({ post }: EditFormProps) => {
           console.error("Delete failed: ", err.message);
         });
       setPageUpdating(false);
-      navigate(`/user-profile/${post.postedBy._id}`);
+      navigate(`/home/user-profile/${post.postedBy._id}`);
     }
   };
 

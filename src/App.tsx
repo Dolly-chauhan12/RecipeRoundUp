@@ -2,6 +2,7 @@ import Landing from "./containers/Landing";
 import { Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ScrollToTop from "./utils/ScrollToTop";
+import Home from "./containers/Home";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
       <ScrollToTop />
       <div className="App">
         <Routes>
-          <Route path="/*" element={<Landing />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/home/*" element={<Home />} />
         </Routes>
       </div>
     </GoogleOAuthProvider>
