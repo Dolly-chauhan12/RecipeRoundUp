@@ -2,6 +2,7 @@ import logo from "../assets/RR(Logo2).png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { Login } from "./";
 
 const links = [
   {
@@ -12,7 +13,7 @@ const links = [
   {
     id: 2,
     name: "recipes",
-    to: "/",
+    to: "/home/search",
   },
   {
     id: 3,
@@ -30,16 +31,14 @@ const Header = () => {
         <p className="font-lexend text-3xl font-bold pt-1.5">RR</p>
       </div>
 
-      <div className="hidden lg:flex items-center justify-around gap-24 font-poppins text-lg ">
+      <div className="hidden lg:flex items-center justify-around gap-24 font-poppins text-lg">
         {links.map(({ id, name, to }) => (
           <nav key={id} className="cursor-pointer capitalize">
             <Link to={to}> {name} </Link>
           </nav>
         ))}
-        <nav>
-          <button className="bg-black text-white p-3 rounded-full ">
-            Submit a recipe
-          </button>
+        <nav className="lg:w-52">
+          <Login />
         </nav>
       </div>
 
@@ -65,9 +64,7 @@ const Header = () => {
           ))}
 
           <nav>
-            <button className="bg-white text-black p-3 font-normal rounded-full ">
-              Submit a recipe
-            </button>
+            <Login />
           </nav>
         </div>
       )}
