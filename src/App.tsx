@@ -7,18 +7,19 @@ import { About } from "./components";
 
 function App() {
   return (
-    <GoogleOAuthProvider
-      clientId={`${process.env.REACT_APP_PUBLIC_GOOGLE_API_TOKEN}`}
-    >
-      <ScrollToTop />
-      <div className="App">
+    <div>
+      <GoogleOAuthProvider
+        clientId={`${process.env.REACT_APP_PUBLIC_GOOGLE_API_TOKEN}`}
+      >
+        <ScrollToTop />
+
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/home/*" element={<Home />} />
           <Route path="/about" element={<About />} />
         </Routes>
-      </div>
-    </GoogleOAuthProvider>
+      </GoogleOAuthProvider>
+    </div>
   );
 }
 

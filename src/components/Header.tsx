@@ -31,9 +31,12 @@ const Header = () => {
         <p className="font-lexend text-3xl font-bold pt-1.5">RR</p>
       </div>
 
-      <div className="hidden lg:flex items-center justify-around gap-24 font-poppins text-lg">
+      <div className="hidden lg:flex items-center justify-around gap-24 font-poppins text-xl   ">
         {links.map(({ id, name, to }) => (
-          <nav key={id} className="cursor-pointer capitalize">
+          <nav
+            key={id}
+            className="cursor-pointer capitalize hover:underline hover:scale-110 duration-100"
+          >
             <Link to={to}> {name} </Link>
           </nav>
         ))}
@@ -54,7 +57,7 @@ const Header = () => {
           {links.map(({ id, to, name }) => (
             <nav
               key={id}
-              className="cursor-pointer capitalize underline underline-offset-4"
+              className="cursor-pointer capitalize hover:underline hover:scale-110 duration-100 underline-offset-4"
             >
               <Link to={to} onClick={() => setNav(!nav)}>
                 {" "}
