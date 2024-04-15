@@ -1,7 +1,7 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { GoVerified } from "react-icons/go";
+import { FaHeart } from "react-icons/fa";
 import { RecipePost } from "../types";
+import { Card, CardHeader, CardFooter, Image, Avatar } from "@nextui-org/react";
 
 interface RecipeCardProps {
   post: RecipePost;
@@ -20,75 +20,52 @@ const colors = [
   "bg-fuchsia-100",
 ];
 
-const RecipeCard = ({ post, searchPage }: RecipeCardProps) => {
-  const { postedBy, image, _id, title, recipe, likes } = post;
+const RecipeCard = ({ post }: RecipeCardProps) => {
+  const { postedBy, image, _id, title, likes } = post;
 
   const random = Math.floor(Math.random() * colors.length);
 
-  const cardClass = `flex flex-col rounded-md  pb-3 transform duration-500 hover:-translate-y-2 hover:shadow-2xl ${colors[random]}`;
+  const cardClass = `w-full h-[40vh] md:h-[400px] lg:h-[372px] duration-500 hover:-translate-y-2 hover:shadow-2xl ${colors[random]}`;
 
   return (
-    <div className={cardClass}>
-      <div>
-        <div className="flex gap-1.5 p-2 cursor-pointer font-semibold rounded ">
-          <div className="md:w-14 md:h-12 w-10 h-10 pl-1">
-            <Link to={`/home/user-profile/${postedBy?._id}`}>
-              <>
-                <img
-                  width={44}
-                  height={44}
-                  className="rounded-full"
-                  src={postedBy?.image}
-                  referrerPolicy="no-referrer"
-                  alt="user-profile"
-                />
-              </>
-            </Link>
-          </div>
-          <div className="md:w-60 md:h-12 w-30 h-10 flex items-center">
-            <Link to={`/home/user-profile/${postedBy?._id}`}>
-              <p className="flex gap-2 items-center md:text-lg font-bold  hover:underline font-PTserif">
-                {postedBy.userName}{" "}
-                <GoVerified className="text-blue-400 text-md" />
+    <Link to={`/home/post-detail/${_id}`}>
+      <Card isFooterBlurred className={cardClass}>
+        <Image
+          removeWrapper
+          alt="Relaxing app background"
+          className="rounded-xl object-cover w-11/12 h-3/5 z-0 mx-auto my-2 border-3 border-white"
+          src={image.asset.url}
+        ></Image>
+        <CardHeader>
+          <h4 className="text-black font-medium text-lg md:text-2xl font-poppins line-clamp-1">
+            {title}
+          </h4>
+        </CardHeader>
+        <Link to={`/home/user-profile/${postedBy?._id}`}>
+          <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
+            <div className="flex flex-grow gap-3 items-center text-white">
+              <Avatar
+                isBordered
+                src={postedBy?.image}
+                name={postedBy?.userName}
+              />
+              <p className="font-lexend text-lg">{postedBy?.userName}</p>
+            </div>
+
+            <div className="flex gap-2 text-red-500 items-center">
+              <div>
+                <FaHeart className="text-lg md:text-4xl" />
+              </div>
+
+              <p className="text-lg text-white">
+                {likes?.length ? likes?.length : 0}
               </p>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className=" flex gap-4 relative ml-3">
-        <Link to={`/home/post-detail/${_id}`}>
-          <div className="group flex justify-center text-center relative overflow-hidden rounded-md cursor-pointer p-8">
-            <img
-              alt="recipe"
-              src={image.asset.url}
-              className="lg:w-[600px] lg:h-[372px] md:w-[550px] md:h-[400px]  sm:w-[86vw] sm:h-[56vh] w-[80vw] h-[40vh] object-cover rounded-2xl cursor-pointer bg-gray-100 ease-in-out duration-500  md:group-hover:scale-110 "
-            ></img>
-          </div>
-          <div>
-            <h2 className=" font-semibold text-2xl line-clamp-1 px-8 font-hind">
-              {title}{" "}
-            </h2>
-          </div>
-
-          <p className="font-bold mt-1 px-8">
-            Liked by {likes?.length ? likes?.length : 0} people
-          </p>
+            </div>
+          </CardFooter>
         </Link>
-        {/* {recipe && recipe.length > 0 && !searchPage && (
-          <div className="w-1/2 mt-2 pt-5  h-[390px]  hidden md:block ml-1">
-            <p className="line-clamp-15  font-medium whitespace-pre-wrap font-lexend">
-              {recipe}
-            </p>
-          </div>
-        )} */}
-      </div>
-    </div>
+      </Card>
+    </Link>
   );
 };
 
 export default RecipeCard;
-
-// border-b-2 border-gray-200
-// md:group-hover:rotate-3
-// md:group-hover:opacity-80
