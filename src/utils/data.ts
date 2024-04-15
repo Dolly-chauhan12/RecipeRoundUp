@@ -8,7 +8,6 @@ export const searchQuery = (searchTerm: string) => {
             _id,
             title,
             userId,
-            recipe,
             postedBy->{
               _id,
               userName,
@@ -30,7 +29,6 @@ export const searchQueryByLikes = (searchTerm: string) => {
             _id,
             title,
             userId,
-            recipe,
             postedBy->{
               _id,
               userName,
@@ -50,7 +48,6 @@ export const feedQuery = `*[_type == "post"] | order(_createdAt desc)[0...10] {
         }
       },
       userId,
-      recipe,
       postedBy->{
         _id,
         userName,
@@ -70,7 +67,6 @@ export const feedQueryByLikes = `*[_type == "post"] |  order(count(likes) desc)[
         }
       },
       userId,
-      recipe,
       postedBy->{
         _id,
         userName,
@@ -192,7 +188,6 @@ export const nextPageQueryFeed = (lastId: string, lastCreatedAt: string) => {
            }
          },
          userId,
-         recipe,
          postedBy->{
            _id,
            userName,
@@ -221,7 +216,6 @@ export const nextPageQueryFeedByLikes = (
            }
          },
          userId,
-         recipe,
          postedBy->{
            _id,
            userName,
@@ -252,7 +246,6 @@ export const nextPageQueryCategory = (
             _id,
             title,
             userId,
-            recipe,
             postedBy->{
               _id,
               userName,
@@ -281,7 +274,6 @@ export const nextPageQueryCategoryByLikes = (
             _id,
             title,
             userId,
-            recipe,
             postedBy->{
               _id,
               userName,

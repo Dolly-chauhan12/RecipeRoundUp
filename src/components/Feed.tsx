@@ -233,9 +233,11 @@ const Feed = () => {
             hasMore={posts.length < totalPosts}
             loader={<Spinner message="Fetching new recipes for you..." />}
           >
-            {posts.map((post) => (
-              <RecipeCard post={post} key={post._id} />
-            ))}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
+              {posts.map((post) => (
+                <RecipeCard post={post} key={post._id} />
+              ))}
+            </div>
           </InfiniteScroll>
         </>
       ) : (

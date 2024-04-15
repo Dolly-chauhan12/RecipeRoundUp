@@ -19,7 +19,7 @@ const Discover = () => {
       </p>
       <div className="flex gap-3 flex-wrap">
         {categories?.map((item) => (
-          <Link to={`/?category=${item.name}`} key={item.name}>
+          <Link to={`/home/?category=${item.name}`} key={item.name}>
             <div
               className={category === item.name ? activeTopicStyle : topicStyle}
             >

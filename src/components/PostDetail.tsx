@@ -94,7 +94,7 @@ const PostDetail = ({ user }: PostDetailProps) => {
                     <div className="absolute right-8 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="py-1" role="none">
                         <Link
-                          to={`/post/edit/${postId}`}
+                          to={`/home/post/edit/${postId}`}
                           className="flex px-4 py-2 text-sm text-gray-700"
                         >
                           <BsPencilSquare fontSize={21} className="mr-2" />
@@ -132,7 +132,7 @@ const PostDetail = ({ user }: PostDetailProps) => {
           <div className="flex my-2">
             <p className="text-lg font-bold mr-2 py-2">By : </p>
             <Link
-              to={`/user-profile/${postDetail?.postedBy._id}`}
+              to={`/home/user-profile/${postDetail?.postedBy._id}`}
               className="flex gap-2 items-center bg-white rounded-lg "
             >
               <img

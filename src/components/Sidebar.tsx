@@ -26,7 +26,7 @@ const Sidebar = () => {
               <img className=" h-full w-full" src={Logo} alt="rrlogo" />
             </div>
 
-            <Link to="/">
+            <Link to="/home">
               <div className="flex items-center gap-3 bg-gray-200 py-3 px-2 justify-center xl:justify-start cursor-pointer font-semibold text-emerald-600 rounded mt-1 xl:mt-2 w-full -ml-1 lg:-ml-0">
                 <p className="text-2xl">
                   <AiFillHome />

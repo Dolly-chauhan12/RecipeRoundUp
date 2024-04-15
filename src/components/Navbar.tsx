@@ -23,7 +23,7 @@ const Navbar = ({ searchTerm, setSearchTerm, user }: NavbarProps) => {
           type="text"
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
-          onFocus={() => navigate("/search")}
+          onFocus={() => navigate("/home/search")}
           className="p-3 md:text-md font-medium   w-11/12 rounded-l-full outline-none"
           placeholder="Search Recipes and accounts "
         />
@@ -35,7 +35,7 @@ const Navbar = ({ searchTerm, setSearchTerm, user }: NavbarProps) => {
       <div className="mt-1">
         {user ? (
           <div className="flex gap-5 md:gap-10">
-            <Link to="/create-post">
+            <Link to="/home/create-post">
               <button className="rounded px-2 md:px-4 text-xl font-semibold flex items-center gap-2 my-1 py-2 bg-gradient-to-r from-green-400 via-green-500 to-green-700  hover:bg-gradient-to-br text-white">
                 <IoMdAdd className="text-2xl " />
                 <span>Upload</span>
