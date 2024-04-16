@@ -27,7 +27,7 @@ const Landing = () => {
 
         <img
           src={heroimg}
-          alt="hero image"
+          alt="hero-section"
           className="hidden lg:block absolute top-0 right-0 lg:w-1/2 h-screen z-10 "
         />
       </div>

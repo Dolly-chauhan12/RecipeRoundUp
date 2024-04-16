@@ -32,7 +32,7 @@ const RecipeCard = ({ post }: RecipeCardProps) => {
       <Card isFooterBlurred className={cardClass}>
         <Image
           removeWrapper
-          alt="Relaxing app background"
+          alt="recipe"
           className="rounded-xl object-cover w-11/12 h-3/5 z-0 mx-auto my-2 border-3 border-white"
           src={image.asset.url}
         ></Image>
