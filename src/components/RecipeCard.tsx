@@ -25,7 +25,7 @@ const RecipeCard = ({ post }: RecipeCardProps) => {
 
   const random = Math.floor(Math.random() * colors.length);
 
-  const cardClass = `w-full h-[40vh] md:h-[400px] lg:h-[372px] duration-500 hover:-translate-y-2 hover:shadow-2xl ${colors[random]}`;
+  const cardClass = `transition w-full h-[40vh] md:h-[400px] lg:h-[372px] duration-300 hover:-translate-y-2  ease-in-out hover:shadow-2xl ${colors[random]}`;
 
   return (
     <Link to={`/home/post-detail/${_id}`}>
