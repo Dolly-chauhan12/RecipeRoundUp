@@ -1,5 +1,11 @@
 import logo from "../assets/RR(Logo2).png";
-import { useState } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  MouseEvent,
+  MouseEventHandler,
+} from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Login } from "./";
@@ -23,7 +29,30 @@ const links = [
 ];
 
 const Header = () => {
+  const sideNavRef = useRef<HTMLDivElement>(null);
   const [nav, setNav] = useState(false);
+
+  useEffect(() => {
+    // Add event listener to the document object
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  function handleClickOutside(event: Event) {
+    if (
+      sideNavRef.current &&
+      !sideNavRef?.current?.contains(event.target as Node)
+    ) {
+      // Clicked outside the side navigation bar, close it
+      // Implement your close side navigation bar logic here
+      setNav(false);
+    }
+  }
+
   return (
     <div className="flex items-center justify-between px-12 my-3 z-40 ">
       <div className="flex items-center justify-around gap-1.5">
@@ -49,11 +78,14 @@ const Header = () => {
         onClick={() => setNav(!nav)}
         className="cursor-pointer pr-4 z-30 text-black lg:hidden"
       >
-        {nav ? <FaTimes size={30} color="white" /> : <FaBars size={30} />}
+        {!nav && <FaBars size={30} />}
       </div>
 
       {nav && (
-        <div className="flex flex-col  pl-4 justify-center items-start absolute top-0 right-0 w-1/2 h-full font-poppins text-xl font-bold gap-12 bg-gradient-to-r from-gray-700 to-black  text-white ">
+        <div
+          className="flex flex-col  pl-4 justify-center items-start absolute top-0 right-0 w-2/3 md:w-2/5 h-full font-poppins text-2xl font-bold gap-12 bg-slate-100"
+          ref={sideNavRef}
+        >
           {links.map(({ id, to, name }) => (
             <nav
               key={id}

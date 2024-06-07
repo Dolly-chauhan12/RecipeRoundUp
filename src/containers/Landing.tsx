@@ -10,7 +10,7 @@ const Landing = () => {
        h-full w-full "
       >
         <div className="w-full lg:w-1/2 px-3 lg:px-6 flex flex-col gap-4 py-24 lg:py-36 ">
-          <h2 className="font-poppins text-6xl">
+          <h2 className="font-poppins   text-6xl ">
             Discover Simple, Delicious and
             <br />
             <span className="text-green-800">fast recipes !</span>
@@ -19,7 +19,7 @@ const Landing = () => {
             No one is born a great cook. One learns by doing.
           </p>
           <Link to="/home">
-            <button className="bg-black text-white px-6 py-3 rounded-full text-2xl font-montaguSlab">
+            <button className="w-full sm:w-fit bg-black text-white px-6 py-3 rounded-full text-base lg:text-2xl font-montaguSlab">
               Explore
             </button>
           </Link>
