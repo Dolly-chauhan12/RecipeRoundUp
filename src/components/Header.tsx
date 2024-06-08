@@ -1,13 +1,7 @@
 import logo from "../assets/RR(Logo2).png";
-import {
-  useState,
-  useRef,
-  useEffect,
-  MouseEvent,
-  MouseEventHandler,
-} from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 import { Login } from "./";
 
 const links = [
